@@ -20,6 +20,7 @@ find_library(
         log-lib
         log)
 
+# 方法一：
 # 声明一个CPP源码文件路径
 set(CPP_MAIN_PATH ${CMAKE_SOURCE_DIR}/lib_ffmpeg/${CMAKE_ANDROID_ARCH_ABI})
 # 配置头文件
@@ -29,7 +30,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${CPP_MAIN_PATH}/lib")
 
 
 #set(${CMAKE_SOURCE_DIR}/lib_ffmpeg/)
-
 #add_library(avutil
 #        SHARED
 #        IMPORTED)
@@ -95,8 +95,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -L${CPP_MAIN_PATH}/lib")
 #
 #include_directories(${CMAKE_SOURCE_DIR}/lib_ffmpeg/${CMAKE_ANDROID_ARCH_ABI}/include)
 
-target_link_libraries( # Specifies the target library.
-        mediaplayer_one
+target_link_libraries(
+        mediaplayer_one # 项目so库
         avutil
         swresample
         swscale
