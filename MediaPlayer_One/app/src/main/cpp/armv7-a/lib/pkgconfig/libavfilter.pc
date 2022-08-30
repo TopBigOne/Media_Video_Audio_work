@@ -1,0 +1,14 @@
+prefix=/Users/dev/Documents/Android_work/Meida_Video_Audio_work/raw_dir/ffmpeg/android/armv7-a
+exec_prefix=${prefix}
+libdir=/Users/dev/Documents/Android_work/Meida_Video_Audio_work/raw_dir/ffmpeg/android/armv7-a/lib
+includedir=/Users/dev/Documents/Android_work/Meida_Video_Audio_work/raw_dir/ffmpeg/android/armv7-a/include
+
+Name: libavfilter
+Description: FFmpeg audio/video filtering library
+Version: 8.46.103
+Requires: 
+Requires.private: libswscale >= 6.8.104, libavformat >= 59.30.100, libavcodec >= 59.42.103, libswresample >= 4.9.100, libavutil >= 57.34.100
+Conflicts:
+Libs: -L${libdir}  -lavfilter 
+Libs.private: -pthread -lm -latomic
+Cflags: -I${includedir}

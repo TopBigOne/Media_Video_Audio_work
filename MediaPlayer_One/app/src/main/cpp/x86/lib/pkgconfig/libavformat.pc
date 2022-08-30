@@ -1,0 +1,14 @@
+prefix=/Users/dev/Documents/Android_work/Meida_Video_Audio_work/raw_dir/ffmpeg/android/x86
+exec_prefix=${prefix}
+libdir=/Users/dev/Documents/Android_work/Meida_Video_Audio_work/raw_dir/ffmpeg/android/x86/lib
+includedir=/Users/dev/Documents/Android_work/Meida_Video_Audio_work/raw_dir/ffmpeg/android/x86/include
+
+Name: libavformat
+Description: FFmpeg container format library
+Version: 59.30.100
+Requires: 
+Requires.private: libavcodec >= 59.42.103, libswresample >= 4.9.100, libavutil >= 57.34.100
+Conflicts:
+Libs: -L${libdir}  -lavformat 
+Libs.private: -lm -latomic -lz
+Cflags: -I${includedir}
