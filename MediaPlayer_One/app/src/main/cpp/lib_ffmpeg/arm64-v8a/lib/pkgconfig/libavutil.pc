@@ -1,0 +1,14 @@
+prefix=/Users/dev/Documents/Android_work/Meida_Video_Audio_work/raw_dir/ffmpeg/android/armv8-a
+exec_prefix=${prefix}
+libdir=/Users/dev/Documents/Android_work/Meida_Video_Audio_work/raw_dir/ffmpeg/android/armv8-a/lib
+includedir=/Users/dev/Documents/Android_work/Meida_Video_Audio_work/raw_dir/ffmpeg/android/armv8-a/include
+
+Name: libavutil
+Description: FFmpeg utility library
+Version: 57.34.100
+Requires: 
+Requires.private: 
+Conflicts:
+Libs: -L${libdir}  -lavutil 
+Libs.private: -pthread -lm -latomic
+Cflags: -I${includedir}
