@@ -56,7 +56,7 @@ typedef struct _tag_NativeImage {
 } NativeImage;
 
 
-class ImageDef {
+class NativeImageUtil {
 
 public:
     static void AllocNativeImage(NativeImage *pImage) {
