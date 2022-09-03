@@ -4,6 +4,7 @@
 # Sets the minimum version of CMake required to build the native library.
 
 cmake_minimum_required(VERSION 3.18.1)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
 # Declares and names the project.
 
@@ -17,11 +18,12 @@ file(GLOB src-files
         ${CMAKE_SOURCE_DIR}/player/decoder/*.cpp
         ${CMAKE_SOURCE_DIR}/player/render/video/*.cpp
         ${CMAKE_SOURCE_DIR}/player/render/audio/*.cpp
-        ${CMAKE_SOURCE_DIR}/recorder/SingleVideoRecorder.cpp
-        ${CMAKE_SOURCE_DIR}/recorder/SingleAudioRecorder.cpp
-        ${CMAKE_SOURCE_DIR}/recorder/MediaRecorderContext.cpp
-        ${CMAKE_SOURCE_DIR}/recorder/GLCameraRender.cpp
-        ${CMAKE_SOURCE_DIR}/recorder/MediaRecorder.cpp
+
+#        ${CMAKE_SOURCE_DIR}/recorder/SingleVideoRecorder.cpp
+#        ${CMAKE_SOURCE_DIR}/recorder/SingleAudioRecorder.cpp
+#        ${CMAKE_SOURCE_DIR}/recorder/MediaRecorderContext.cpp
+#        ${CMAKE_SOURCE_DIR}/recorder/GLCameraRender.cpp
+#        ${CMAKE_SOURCE_DIR}/recorder/MediaRecorder.cpp
         )
 
 add_library( # Sets the name of the library.

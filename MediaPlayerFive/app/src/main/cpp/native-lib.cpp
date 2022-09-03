@@ -11,7 +11,7 @@ extern "C" {
 #include <libavfilter/version.h>
 #include <libswresample/version.h>
 #include <libswscale/version.h>
-};
+}
 
 extern "C"
 JNIEXPORT jstring JNICALL
@@ -39,4 +39,52 @@ Java_com_jar_media_1player_1five_media_FFMediaPlayer_native_1GetFFmpegVersion(JN
     //ASanTestCase::MainTest();
 
     return env->NewStringUTF(strBuffer);
+}
+
+
+
+
+
+
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_com_jar_media_1player_1five_media_FFMediaPlayer_native_1Init(JNIEnv *env, jobject thiz,
+                                                                  jstring url, jint player_type,
+                                                                  jint render_type,
+                                                                  jobject surface) {
+
+
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_jar_media_1player_1five_media_FFMediaPlayer_native_1Play(JNIEnv *env, jobject thiz,
+                                                                  jlong player_handle) {
+
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_jar_media_1player_1five_media_FFMediaPlayer_native_1SeekToPosition(JNIEnv *env,
+                                                                            jobject thiz,
+                                                                            jlong player_handle,
+                                                                            jfloat position) {
+
+
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_jar_media_1player_1five_media_FFMediaPlayer_native_1Pause(JNIEnv *env, jobject thiz,
+                                                                   jlong player_handle) {
+    // TODO: implement native_Pause()
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_jar_media_1player_1five_media_FFMediaPlayer_native_1Stop(JNIEnv *env, jobject thiz,
+                                                                  jlong player_handle) {
+    // TODO: implement native_Stop()
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_jar_media_1player_1five_media_FFMediaPlayer_native_1UnInit(JNIEnv *env, jobject thiz,
+                                                                    jlong player_handle) {
+    // TODO: implement native_UnInit()
 }
