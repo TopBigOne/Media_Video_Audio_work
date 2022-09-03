@@ -9,10 +9,20 @@ cmake_minimum_required(VERSION 3.18.1)
 
 project("media_player_five")
 
-# Creates and names a library, sets it as either STATIC
-# or SHARED, and provides the relative paths to its source code.
-# You can define multiple libraries, and CMake builds them for you.
-# Gradle automatically packages shared libraries with your APK.
+file(GLOB src-files
+        ${CMAKE_SOURCE_DIR}/*.cpp
+        ${CMAKE_SOURCE_DIR}/util/*.cpp
+        ${CMAKE_SOURCE_DIR}/common/*.cpp
+        ${CMAKE_SOURCE_DIR}/player/*.cpp
+        ${CMAKE_SOURCE_DIR}/player/decoder/*.cpp
+        ${CMAKE_SOURCE_DIR}/player/render/video/*.cpp
+        ${CMAKE_SOURCE_DIR}/player/render/audio/*.cpp
+        ${CMAKE_SOURCE_DIR}/recorder/SingleVideoRecorder.cpp
+        ${CMAKE_SOURCE_DIR}/recorder/SingleAudioRecorder.cpp
+        ${CMAKE_SOURCE_DIR}/recorder/MediaRecorderContext.cpp
+        ${CMAKE_SOURCE_DIR}/recorder/GLCameraRender.cpp
+        ${CMAKE_SOURCE_DIR}/recorder/MediaRecorder.cpp
+        )
 
 add_library( # Sets the name of the library.
         media_player_five
@@ -21,13 +31,56 @@ add_library( # Sets the name of the library.
         SHARED
 
         # Provides a relative path to your source file(s).
-        native-lib.cpp)
+        ${src-files})
 
-# Searches for a specified prebuilt library and stores the path as a
-# variable. Because CMake includes system libraries in the search path by
-# default, you only need to specify the name of the public NDK library
-# you want to add. CMake verifies that the library exists before
-# completing its build.
+
+set(ffmpeg_path ${CMAKE_SOURCE_DIR}/lib_ffmpeg/${CMAKE_ANDROID_ARCH_ABI})
+message(WARNING "ffmpeg_path : ${ffmpeg_path}")
+
+include_directories(${ffmpeg_path}/include)
+
+add_library(avutil
+        SHARED
+        IMPORTED)
+set_target_properties(avutil
+        PROPERTIES IMPORTED_LOCATION
+        ${ffmpeg_path}/lib/libavutil.so)
+
+add_library(swresample
+        SHARED
+        IMPORTED)
+set_target_properties(swresample
+        PROPERTIES IMPORTED_LOCATION
+        ${ffmpeg_path}/lib/libswresample.so)
+
+add_library(avcodec
+        SHARED
+        IMPORTED)
+set_target_properties(avcodec
+        PROPERTIES IMPORTED_LOCATION
+        ${ffmpeg_path}/lib/libavcodec.so)
+
+add_library(avfilter
+        SHARED
+        IMPORTED)
+set_target_properties(avfilter
+        PROPERTIES IMPORTED_LOCATION
+        ${ffmpeg_path}/lib/libavfilter.so)
+
+add_library(swscale
+        SHARED
+        IMPORTED)
+set_target_properties(swscale
+        PROPERTIES IMPORTED_LOCATION
+        ${ffmpeg_path}/lib/libswscale.so)
+
+add_library(avformat
+        SHARED
+        IMPORTED)
+set_target_properties(avformat
+        PROPERTIES IMPORTED_LOCATION
+        ${ffmpeg_path}/lib/libavformat.so)
+
 
 find_library( # Sets the name of the path variable.
         log-lib
@@ -36,13 +89,18 @@ find_library( # Sets the name of the path variable.
         # you want CMake to locate.
         log)
 
-# Specifies libraries CMake should link to your target library. You
-# can link multiple libraries, such as libraries you define in this
-# build script, prebuilt third-party libraries, or system libraries.
+
+set(third-party-libs
+        avformat
+        avcodec
+        avfilter
+        swresample
+        swscale
+        avutil
+        )
+
 
 target_link_libraries( # Specifies the target library.
         media_player_five
-
-        # Links the target library to the log library
-        # included in the NDK.
+        ${third-party-libs}
         ${log-lib})

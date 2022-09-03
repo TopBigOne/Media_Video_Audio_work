@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import com.jar.media_player_five.databinding.ActivityMainBinding
+import com.jar.media_player_five.media.FFMediaPlayer
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,19 +17,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Example of a call to a native method
-        binding.sampleText.text = stringFromJNI()
+        binding.sampleText.text = FFMediaPlayer.GetFFmpegVersion()
     }
 
-    /**
-     * A native method that is implemented by the 'media_player_five' native library,
-     * which is packaged with this application.
-     */
-    external fun stringFromJNI(): String
 
     companion object {
-        // Used to load the 'media_player_five' library on application startup.
-        init {
-            System.loadLibrary("media_player_five")
-        }
+
     }
 }
