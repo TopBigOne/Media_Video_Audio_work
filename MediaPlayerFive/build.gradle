@@ -5,6 +5,11 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.6.10' apply false
 }
 
+task clearAllData(type: Exec) {
+    def clearDataCommand = ['adb', 'shell', 'pm', 'clear', 'com.jar.media_player_five']
+    commandLine clearDataCommand
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

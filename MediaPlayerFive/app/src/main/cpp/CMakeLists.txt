@@ -98,9 +98,19 @@ set(third-party-libs
         swscale
         avutil
         )
+set(native-libs
+        android
+        EGL
+        GLESv3
+        OpenSLES
+        log
+        m
+        z
+        )
 
 
 target_link_libraries( # Specifies the target library.
         media_player_five
         ${third-party-libs}
+        ${native-libs}
         ${log-lib})
