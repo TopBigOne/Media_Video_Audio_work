@@ -10,7 +10,7 @@
 #define VIDEO_RENDER_ANWINDOW           1
 #define VIDEO_RENDER_3D_VR              2
 
-#include "../../../util//ImageDef.h"
+#include "ImageDef.h"
 
 
 class VideoRender {

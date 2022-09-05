@@ -1,14 +1,29 @@
-# For more information about using CMake with Android Studio, read the
-# documentation: https://d.android.com/studio/projects/add-native-code.html
 
-# Sets the minimum version of CMake required to build the native library.
-
-cmake_minimum_required(VERSION 3.18.1)
+cmake_minimum_required(VERSION 3.4.1)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+set(jnilibs ${CMAKE_SOURCE_DIR}/../jniLibs)
 
-# Declares and names the project.
+message(WARNING "jniLibs path  : ${jnilibs}")
 
 project("media_player_five")
+
+
+#  配置源码头文件path
+include_directories(
+        glm
+        common
+        include
+        ${CMAKE_SOURCE_DIR}/recorder
+        ${CMAKE_SOURCE_DIR}/util
+        ${CMAKE_SOURCE_DIR}/player
+        ${CMAKE_SOURCE_DIR}/player/decoder
+        ${CMAKE_SOURCE_DIR}/player/render
+        ${CMAKE_SOURCE_DIR}/player/render/audio
+        ${CMAKE_SOURCE_DIR}/player/render/video)
+
+set(SO_PATH ${jnilibs}/${CMAKE_ANDROID_ARCH_ABI})
+message(WARNING "SO_PATH   : ${SO_PATH}")
+link_directories(${SO_PATH})
 
 file(GLOB src-files
         ${CMAKE_SOURCE_DIR}/*.cpp
@@ -18,12 +33,11 @@ file(GLOB src-files
         ${CMAKE_SOURCE_DIR}/player/decoder/*.cpp
         ${CMAKE_SOURCE_DIR}/player/render/video/*.cpp
         ${CMAKE_SOURCE_DIR}/player/render/audio/*.cpp
-
         ${CMAKE_SOURCE_DIR}/recorder/SingleVideoRecorder.cpp
-#        ${CMAKE_SOURCE_DIR}/recorder/SingleAudioRecorder.cpp
-#        ${CMAKE_SOURCE_DIR}/recorder/MediaRecorderContext.cpp
-#        ${CMAKE_SOURCE_DIR}/recorder/GLCameraRender.cpp
-#        ${CMAKE_SOURCE_DIR}/recorder/MediaRecorder.cpp
+        ${CMAKE_SOURCE_DIR}/recorder/SingleAudioRecorder.cpp
+        ${CMAKE_SOURCE_DIR}/recorder/MediaRecorderContext.cpp
+        ${CMAKE_SOURCE_DIR}/recorder/GLCameraRender.cpp
+        ${CMAKE_SOURCE_DIR}/recorder/MediaRecorder.cpp
         )
 
 add_library( # Sets the name of the library.
@@ -36,60 +50,6 @@ add_library( # Sets the name of the library.
         ${src-files})
 
 
-set(ffmpeg_path ${CMAKE_SOURCE_DIR}/lib_ffmpeg/${CMAKE_ANDROID_ARCH_ABI})
-message(WARNING "ffmpeg_path : ${ffmpeg_path}")
-
-include_directories(${ffmpeg_path}/include)
-
-add_library(avutil
-        SHARED
-        IMPORTED)
-set_target_properties(avutil
-        PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_path}/lib/libavutil.so)
-
-add_library(swresample
-        SHARED
-        IMPORTED)
-set_target_properties(swresample
-        PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_path}/lib/libswresample.so)
-
-add_library(avcodec
-        SHARED
-        IMPORTED)
-set_target_properties(avcodec
-        PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_path}/lib/libavcodec.so)
-
-add_library(avfilter
-        SHARED
-        IMPORTED)
-set_target_properties(avfilter
-        PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_path}/lib/libavfilter.so)
-
-add_library(swscale
-        SHARED
-        IMPORTED)
-set_target_properties(swscale
-        PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_path}/lib/libswscale.so)
-
-add_library(avformat
-        SHARED
-        IMPORTED)
-set_target_properties(avformat
-        PROPERTIES IMPORTED_LOCATION
-        ${ffmpeg_path}/lib/libavformat.so)
-
-
-find_library( # Sets the name of the path variable.
-        log-lib
-
-        # Specifies the name of the NDK library that
-        # you want CMake to locate.
-        log)
 
 
 set(third-party-libs
@@ -99,6 +59,8 @@ set(third-party-libs
         swresample
         swscale
         avutil
+        fdk-aac
+        x264
         )
 set(native-libs
         android
@@ -113,6 +75,7 @@ set(native-libs
 
 target_link_libraries( # Specifies the target library.
         media_player_five
+        ${log-lib}
         ${third-party-libs}
         ${native-libs}
-        ${log-lib})
+        )

@@ -1,7 +1,16 @@
-#include <jni.h>
-#include <string>
-#include "util/LogUtil.h"
 
+#include <string>
+
+
+#include <cstdio>
+#include <cstring>
+#include "player/PlayerWrapper.h"
+#include "player/render/video/VideoGLRender.h"
+#include "player/render/video/VRGLRender.h"
+#include "player/render/audio/OpenSLRender.h"
+#include "recorder/MediaRecorderContext.h"
+#include "util/LogUtil.h"
+#include "jni.h"
 
 extern "C" {
 #include <libavcodec/version.h>
@@ -74,7 +83,9 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_jar_media_1player_1five_media_FFMediaPlayer_native_1Pause(JNIEnv *env, jobject thiz,
                                                                    jlong player_handle) {
-    // TODO: implement native_Pause()
+
+    PlayerWrapper *ffMediaPlayer = reinterpret_cast<PlayerWrapper *>(player_handle);
+    ffMediaPlayer->Pause();
 }
 extern "C"
 JNIEXPORT void JNICALL

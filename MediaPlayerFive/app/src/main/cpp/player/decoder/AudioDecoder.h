@@ -12,9 +12,9 @@ extern "C" {
 #include <libavutil/audio_fifo.h>
 }
 
-#include "../render/audio/AudioRender.h"
-#include "../../recorder/SingleVideoRecorder.h"
-#include "../../util/LogUtil.h"
+#include "render/audio/AudioRender.h"
+#include "SingleVideoRecorder.h"
+#include "LogUtil.h"
 
 #include "Decoder.h"
 #include "DecoderBase.h"

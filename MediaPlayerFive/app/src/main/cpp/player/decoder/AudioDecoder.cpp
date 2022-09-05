@@ -2,9 +2,7 @@
 // Created by dev on 2022/9/3.
 //
 
-
-
-
+#include <LogUtil.h>
 #include "AudioDecoder.h"
 
 void AudioDecoder::OnDecoderReady() {
@@ -26,7 +24,7 @@ void AudioDecoder::OnDecoderReady() {
         swr_init(m_SwrContext);
 
         LOGCATE("AudioDecoder::OnDecoderReady audio metadata sample rate: %d, channel: %d, format: %d, frame_size: %d, layout: %lld",
-                codeCtx->sample_rate, codeCtx->channels, codeCtx->sample_fmt, codeCtx->frame_size,codeCtx->channel_layout);
+             codeCtx->sample_rate, codeCtx->channels, codeCtx->sample_fmt, codeCtx->frame_size,codeCtx->channel_layout);
 
         // resample params
         m_nbSamples = (int)av_rescale_rnd(ACC_NB_SAMPLES, AUDIO_DST_SAMPLE_RATE, codeCtx->sample_rate, AV_ROUND_UP);

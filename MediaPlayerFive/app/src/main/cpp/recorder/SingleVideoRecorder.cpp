@@ -72,9 +72,8 @@ int SingleVideoRecorder::StartRecord() {
             break;
         }
 
-        //  这个函数在5.0 没法用了
+        //todo  这个函数在5.0 没法用了
         // av_stream_set_r_frame_rate(m_pStream, {1, m_frameRate});
-
         result = avcodec_open2(m_pCodecCtx, m_pCodec, nullptr);
         if (result < 0) {
             LOGCATE("SingleVideoRecorder::StartRecord avcodec_open2 ret=%d", result);

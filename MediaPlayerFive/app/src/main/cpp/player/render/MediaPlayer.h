@@ -1,13 +1,10 @@
-/**
- *
- * Created by 公众号：字节流动 on 2021/12/16.
- * https://github.com/githubhaohao/LearnFFmpeg
- * 最新文章首发于公众号：字节流动，有疑问或者技术交流可以添加微信 Byte-Flow ,领取视频教程, 拉你进技术交流群
- *
- * */
+//
+// Created by dev on 2022/9/4.
+//
 
-#ifndef LEARNFFMPEG_MEDIAPLAYER_H
-#define LEARNFFMPEG_MEDIAPLAYER_H
+#ifndef MEDIAPLAYERFIVE_MEDIAPLAYER_H
+#define MEDIAPLAYERFIVE_MEDIAPLAYER_H
+
 
 #include <jni.h>
 #include <decoder/VideoDecoder.h>
@@ -46,4 +43,5 @@ public:
     jobject m_JavaObj = nullptr;
 };
 
-#endif //LEARNFFMPEG_MEDIAPLAYER_H
+
+#endif //MEDIAPLAYERFIVE_MEDIAPLAYER_H

@@ -14,10 +14,10 @@ extern "C" {
 #include <libavutil/imgutils.h>
 }
 
-#include "../../../common/ThreadSafeQueue.h"
-#include "../../../util/ImageDef.h"
-#include "../../../util/LogUtil.h"
+#include "ThreadSafeQueue.h"
+#include "ImageDef.h"
 #include "thread"
+#include "LogUtil.h"
 
 using namespace std;
 

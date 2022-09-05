@@ -12,9 +12,8 @@ extern "C" {
 #include <libavcodec/jni.h>
 };
 
-#include "../render/video/VideoRender.h"
-#include "../render/audio/AudioRender.h"
-#include "../../recorder/SingleVideoRecorder.h"
+#include <render/video/VideoRender.h>
+#include <SingleVideoRecorder.h>
 #include "DecoderBase.h"
 
 class VideoDecoder : public DecoderBase {

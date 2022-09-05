@@ -94,11 +94,8 @@ int DecoderBase::InitFFDecoder() {
         AVCodecParameters *codecParameters = m_AVFormatContext->streams[m_StreamIndex]->codecpar;
 
         //6.获取解码器
-        // Demo中写法：
-        // m_AVCodec = avcodec_find_decoder(codecParameters->codec_id);
-        // 新的写法：使用强转
-        m_AVCodec = const_cast<AVCodec *>(avcodec_find_decoder(codecParameters->codec_id));
-        if (m_AVCodec == nullptr) {
+        m_AVCodec = avcodec_find_decoder(codecParameters->codec_id);
+        if(m_AVCodec == nullptr) {
             LOGCATE("DecoderBase::InitFFDecoder avcodec_find_decoder fail.");
             break;
         }
