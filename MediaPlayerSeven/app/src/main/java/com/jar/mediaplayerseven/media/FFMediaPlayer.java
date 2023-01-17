@@ -26,4 +26,9 @@ public class FFMediaPlayer {
     }
 
     private static native String native_GetFFmpegVersion();
+
+
+    public interface EventCallback {
+        void onPlayerEvent(int msgType, float msgValue);
+    }
 }

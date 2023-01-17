@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ASMIdeaPluginConfiguration">
-    <asm skipDebug="true" skipFrames="true" skipCode="false" expandFrames="false" />
+    <asm skipDebug="false" skipFrames="false" skipCode="false" expandFrames="false" />
     <groovy codeStyle="LEGACY" />
   </component>
   <component name="ASMSmaliIdeaPluginConfiguration">
@@ -12,6 +12,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2462962962962963" />
+        <entry key="app/src/main/res/layout/activity_native_media_player.xml" value="0.2546875" />
         <entry key="app/src/main/res/layout/sample_item_layout.xml" value="0.26875" />
         <entry key="app/src/main/res/layout/sample_selected_layout.xml" value="0.2828125" />
         <entry key="app/src/main/res/menu/menu_camera.xml" value="0.1140625" />
