@@ -120,15 +120,17 @@ public class GLMediaPlayerActivity extends AppCompatActivity implements GLSurfac
     @Override
     protected void onPause() {
         super.onPause();
-        if(mMediaPlayer != null)
+        if(mMediaPlayer != null){
             mMediaPlayer.pause();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mMediaPlayer != null)
+        if(mMediaPlayer != null){
             mMediaPlayer.unInit();
+        }
     }
 
     @Override

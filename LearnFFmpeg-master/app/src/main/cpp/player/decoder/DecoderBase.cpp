@@ -142,6 +142,7 @@ int DecoderBase::InitFFDecoder() {
 
 void DecoderBase::UnInitDecoder() {
     LOGCATE("DecoderBase::UnInitDecoder");
+    // 11.释放资源，
     if(m_Frame != nullptr) {
         av_frame_free(&m_Frame);
         m_Frame = nullptr;
@@ -172,6 +173,10 @@ void DecoderBase::StartDecodingThread() {
     m_Thread = new thread(DoAVDecoding, this);
 }
 
+
+/**
+ * 音视频解码循环
+ */
 void DecoderBase::DecodingLoop() {
     LOGCATE("DecoderBase::DecodingLoop start, m_MediaType=%d", m_MediaType);
     {
@@ -179,6 +184,7 @@ void DecoderBase::DecodingLoop() {
         m_DecoderState = STATE_DECODING;
         lock.unlock();
     }
+    LOGCATE("DecoderBase::DecodingLoop , m_DecoderState=%d", m_DecoderState);
 
     for(;;) {
         while (m_DecoderState == STATE_PAUSE) {

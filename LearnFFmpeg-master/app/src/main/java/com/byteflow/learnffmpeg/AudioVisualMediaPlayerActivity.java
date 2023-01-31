@@ -68,13 +68,15 @@ public class AudioVisualMediaPlayerActivity extends AppCompatActivity implements
 
         @Override
         public void onDrawFrame(GL10 gl10) {
-            FFMediaPlayer.native_OnDrawFrame(AUDIO_GL_RENDER);
+            // 绘制音频柱状图
+           FFMediaPlayer.native_OnDrawFrame(AUDIO_GL_RENDER);
         }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: 实现音频可视化播放");
         setContentView(R.layout.activity_audio_visual_media_player);
 
         mVideoGLSurfaceView = findViewById(R.id.video_surface_view);

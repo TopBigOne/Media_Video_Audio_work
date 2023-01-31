@@ -3,10 +3,21 @@
  * Created by 公众号：字节流动 on 2021/3/16.
  * https://github.com/githubhaohao/LearnFFmpeg
  * 最新文章首发于公众号：字节流动，有疑问或者技术交流可以添加微信 Byte-Flow ,领取视频教程, 拉你进技术交流群
- *
+ *https://blog.csdn.net/Kennethdroid/article/details/108425267
  * */
 
 package com.byteflow.learnffmpeg;
+
+import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MEDIA_PARAM_VIDEO_DURATION;
+import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MEDIA_PARAM_VIDEO_HEIGHT;
+import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MEDIA_PARAM_VIDEO_WIDTH;
+import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_DECODER_DONE;
+import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_DECODER_INIT_ERROR;
+import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_DECODER_READY;
+import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_DECODING_TIME;
+import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_REQUEST_RENDER;
+import static com.byteflow.learnffmpeg.media.FFMediaPlayer.VIDEO_RENDER_3D_VR;
+import static com.byteflow.learnffmpeg.media.FFMediaPlayer.VR_3D_GL_RENDER;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -26,28 +37,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.byteflow.learnffmpeg.R;
 import com.byteflow.learnffmpeg.media.FFMediaPlayer;
 import com.byteflow.learnffmpeg.media.MyGLSurfaceView;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MEDIA_PARAM_VIDEO_DURATION;
-import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MEDIA_PARAM_VIDEO_HEIGHT;
-import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MEDIA_PARAM_VIDEO_WIDTH;
-import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_DECODER_DONE;
-import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_DECODER_INIT_ERROR;
-import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_DECODER_READY;
-import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_DECODING_TIME;
-import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_REQUEST_RENDER;
-import static com.byteflow.learnffmpeg.media.FFMediaPlayer.VIDEO_GL_RENDER;
-import static com.byteflow.learnffmpeg.media.FFMediaPlayer.VIDEO_RENDER_3D_VR;
-import static com.byteflow.learnffmpeg.media.FFMediaPlayer.VIDEO_RENDER_OPENGL;
-import static com.byteflow.learnffmpeg.media.FFMediaPlayer.VR_3D_GL_RENDER;
-
 public class VRMediaPlayerActivity extends AppCompatActivity implements GLSurfaceView.Renderer, FFMediaPlayer.EventCallback, MyGLSurfaceView.OnGestureCallback, SensorEventListener {
-    private static final String TAG = "MediaPlayerActivity";
+    private static final String TAG = "VRMediaPlayerActivity";
     private static final String[] REQUEST_PERMISSIONS = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
@@ -56,6 +53,7 @@ public class VRMediaPlayerActivity extends AppCompatActivity implements GLSurfac
     private FFMediaPlayer mMediaPlayer = null;
     private SeekBar mSeekBar = null;
     private boolean mIsTouch = false;
+    // 传感器
     private SensorManager mSensorManager;
     private String mVideoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/byteflow/vr.mp4";
     @Override
@@ -102,14 +100,15 @@ public class VRMediaPlayerActivity extends AppCompatActivity implements GLSurfac
         Log.e(TAG, "onResume() called");
         super.onResume();
         mSensorManager.registerListener(this,
-                mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY),
-                SensorManager.SENSOR_DELAY_FASTEST);
+                mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY), SensorManager.SENSOR_DELAY_FASTEST);
         if (!hasPermissionsGranted(REQUEST_PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, REQUEST_PERMISSIONS, PERMISSION_REQUEST_CODE);
         } else {
-            if(mMediaPlayer != null)
+            if(mMediaPlayer != null){
                 mMediaPlayer.play();
+            }
         }
+
         Toast.makeText(this, "拖动画面感受 3D 效果", Toast.LENGTH_SHORT).show();
 
     }
@@ -132,8 +131,9 @@ public class VRMediaPlayerActivity extends AppCompatActivity implements GLSurfac
     protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(this);
-        if(mMediaPlayer != null)
+        if(mMediaPlayer != null) {
             mMediaPlayer.pause();
+        }
     }
 
     @Override

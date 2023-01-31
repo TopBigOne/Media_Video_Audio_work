@@ -1,10 +1,8 @@
 /**
- *
  * Created by 公众号：字节流动 on 2021/3/16.
  * https://github.com/githubhaohao/LearnFFmpeg
  * 最新文章首发于公众号：字节流动，有疑问或者技术交流可以添加微信 Byte-Flow ,领取视频教程, 拉你进技术交流群
- *
- * */
+ */
 
 package com.byteflow.learnffmpeg;
 
@@ -37,24 +35,21 @@ import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_DECODING_TIME;
 import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_REQUEST_RENDER;
 import static com.byteflow.learnffmpeg.media.FFMediaPlayer.VIDEO_RENDER_ANWINDOW;
 
-public class NativeMediaPlayerActivity extends AppCompatActivity implements SurfaceHolder.Callback, FFMediaPlayer.EventCallback{
-    private static final String TAG = "MediaPlayerActivity";
-    private static final String[] REQUEST_PERMISSIONS = {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-    };
-    private static final int PERMISSION_REQUEST_CODE = 1;
-    private MySurfaceView mSurfaceView = null;
-    private FFMediaPlayer mMediaPlayer = null;
-    private SeekBar mSeekBar = null;
-    private boolean mIsTouch = false;
-    private String mVideoPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/byteflow/one_piece.mp4";
-
-
+public class NativeMediaPlayerActivity extends AppCompatActivity implements SurfaceHolder.Callback, FFMediaPlayer.EventCallback {
+    private static final String        TAG                     = "MediaPlayerActivity";
+    private static final String[]      REQUEST_PERMISSIONS     = {Manifest.permission.WRITE_EXTERNAL_STORAGE,};
+    private static final int           PERMISSION_REQUEST_CODE = 1;
+    private              MySurfaceView mSurfaceView            = null;
+    private              FFMediaPlayer mMediaPlayer            = null;
+    private              SeekBar       mSeekBar                = null;
+    private              boolean       mIsTouch                = false;
+    private              String        mVideoPath              = Environment.getExternalStorageDirectory().getAbsolutePath() + "/byteflow/one_piece.mp4";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: enter NativeMediaPlayerActivity ");
         setContentView(R.layout.activity_media_player);
 
 
@@ -76,7 +71,7 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Log.d(TAG, "onStopTrackingTouch() called with: progress = [" + seekBar.getProgress() + "]");
-                if(mMediaPlayer != null) {
+                if (mMediaPlayer != null) {
                     mMediaPlayer.seekToPosition(mSeekBar.getProgress());
                     mIsTouch = false;
                 }
@@ -121,6 +116,7 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
         Log.d(TAG, "surfaceCreated() called with: surfaceHolder = [" + surfaceHolder + "]");
         mMediaPlayer = new FFMediaPlayer();
         mMediaPlayer.addEventCallback(this);
+        // int VIDEO_RENDER_ANWINDOW       = 1;
         mMediaPlayer.init(mVideoPath, VIDEO_RENDER_ANWINDOW, surfaceHolder.getSurface());
     }
 
@@ -154,8 +150,7 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
                     case MSG_REQUEST_RENDER:
                         break;
                     case MSG_DECODING_TIME:
-                        if(!mIsTouch)
-                            mSeekBar.setProgress((int) msgValue);
+                        if (!mIsTouch) mSeekBar.setProgress((int) msgValue);
                         break;
                     default:
                         break;
@@ -166,10 +161,9 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
     }
 
     private void onDecoderReady() {
-        int videoWidth = (int) mMediaPlayer.getMediaParams(MEDIA_PARAM_VIDEO_WIDTH);
+        int videoWidth  = (int) mMediaPlayer.getMediaParams(MEDIA_PARAM_VIDEO_WIDTH);
         int videoHeight = (int) mMediaPlayer.getMediaParams(MEDIA_PARAM_VIDEO_HEIGHT);
-        if(videoHeight * videoWidth != 0)
-            mSurfaceView.setAspectRatio(videoWidth, videoHeight);
+        if (videoHeight * videoWidth != 0) mSurfaceView.setAspectRatio(videoWidth, videoHeight);
 
         int duration = (int) mMediaPlayer.getMediaParams(MEDIA_PARAM_VIDEO_DURATION);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -180,8 +174,7 @@ public class NativeMediaPlayerActivity extends AppCompatActivity implements Surf
 
     protected boolean hasPermissionsGranted(String[] permissions) {
         for (String permission : permissions) {
-            if (ActivityCompat.checkSelfPermission(this, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
         }

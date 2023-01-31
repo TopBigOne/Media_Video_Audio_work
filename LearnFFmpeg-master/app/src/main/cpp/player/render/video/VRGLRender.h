@@ -30,6 +30,9 @@ using namespace std;
 #define RADIAN(angle) ((angle) / 180 * MATH_PI)
 #define TEXTURE_NUM 3
 
+/**
+ * VR 绘制
+ */
 class VRGLRender: public VideoRender, public BaseGLRender {
 public:
     virtual void Init(int videoWidth, int videoHeight, int *dstSize);

@@ -6,12 +6,12 @@ import android.media.AudioTrack;
 import android.view.Surface;
 
 public class FFMediaPlayer {
-    //gl render type
+    //gl render type 绘制类型
     public static final int VIDEO_GL_RENDER = 0;
     public static final int AUDIO_GL_RENDER = 1;
     public static final int VR_3D_GL_RENDER = 2;
 
-    //player type
+    //player type ： 播放类型
     public static final int FFMEDIA_PLAYER = 0;
     public static final int HWCODEC_PLAYER = 1;
 
@@ -35,6 +35,7 @@ public class FFMediaPlayer {
     public static final int VIDEO_RENDER_ANWINDOW       = 1;
     public static final int VIDEO_RENDER_3D_VR          = 2;
 
+    // 一个指针
     private long mNativePlayerHandle = 0;
 
     private EventCallback mEventCallback = null;
@@ -91,6 +92,7 @@ public class FFMediaPlayer {
     }
 
     public void unInit() {
+        // 释放指针
         native_UnInit(mNativePlayerHandle);
         if(mAudioTrack != null) {
             mAudioTrack.stop();

@@ -11,6 +11,7 @@
 
 NativeRender::NativeRender(JNIEnv *env, jobject surface): VideoRender(VIDEO_RENDER_ANWINDOW)
 {
+    // 1. 利用 Java 层 SurfaceView 传下来的 Surface 对象，获取 ANativeWindow
     m_NativeWindow = ANativeWindow_fromSurface(env, surface);
 }
 
@@ -38,6 +39,7 @@ void NativeRender::Init(int videoWidth, int videoHeight, int *dstSize)
     }
     LOGCATE("NativeRender::Init window[w,h]=[%d, %d],DstSize[w, h]=[%d, %d]", windowWidth, windowHeight, m_DstWidth, m_DstHeight);
 
+    // 2. 设置渲染区域和输入格式
     ANativeWindow_setBuffersGeometry(m_NativeWindow, m_DstWidth,
                                      m_DstHeight, WINDOW_FORMAT_RGBA_8888);
 
