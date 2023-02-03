@@ -9,6 +9,11 @@
 
 #include "NativeRender.h"
 
+/**
+ *
+ * @param env
+ * @param surface  java层的 surface；
+ */
 NativeRender::NativeRender(JNIEnv *env, jobject surface): VideoRender(VIDEO_RENDER_ANWINDOW)
 {
     // 1. 利用 Java 层 SurfaceView 传下来的 Surface 对象，获取 ANativeWindow

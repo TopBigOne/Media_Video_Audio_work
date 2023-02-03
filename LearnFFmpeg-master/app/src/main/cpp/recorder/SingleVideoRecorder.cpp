@@ -70,6 +70,7 @@ int SingleVideoRecorder::StartRecord() {
             break;
         }
 
+        // 设置帧率
         av_stream_set_r_frame_rate(m_pStream, {1, m_frameRate});
 
         result = avcodec_open2(m_pCodecCtx, m_pCodec, nullptr);

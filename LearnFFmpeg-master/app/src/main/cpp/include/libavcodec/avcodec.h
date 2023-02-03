@@ -80,9 +80,15 @@
  * @defgroup lavc_encdec send/receive encoding and decoding API overview
  * @{
  *
- * The avcodec_send_packet()/avcodec_receive_frame()/avcodec_send_frame()/
- * avcodec_receive_packet() functions provide an encode/decode API, which
- * decouples input and output.
+ * The
+ * avcodec_send_packet()/
+ * avcodec_receive_frame()/
+ *
+ * avcodec_send_frame()/
+ * avcodec_receive_packet()
+ *
+ * functions provide an encode/decode API, which
+ * decouples(解耦) input and output.
  *
  * The API is very similar for encoding/decoding and audio/video, and works as
  * follows:
@@ -4278,7 +4284,7 @@ int avcodec_parameters_to_context(AVCodecContext *codec,
                                   const AVCodecParameters *par);
 
 /**
- * Initialize the AVCodecContext to use the given AVCodec. Prior to using this
+ * Initialize the AVCodecContext to use the given AVCodec. Prior（之前） to using this
  * function the context has to be allocated with avcodec_alloc_context3().
  *
  * The functions avcodec_find_decoder_by_name(), avcodec_find_encoder_by_name(),

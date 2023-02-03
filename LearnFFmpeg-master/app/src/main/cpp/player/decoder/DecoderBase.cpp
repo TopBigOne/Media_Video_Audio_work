@@ -285,6 +285,8 @@ int DecoderBase::DecodeOnePacket() {
 //                goto __EXIT;
 //            }
 
+            // 向解码器 发送一个数据包；
+            LOGCATD("DecoderBase::DecodeOnePacket 向解码器 发送一个数据包");
             if(avcodec_send_packet(m_AVCodecContext, m_Packet) == AVERROR_EOF) {
                 //解码结束
                 result = -1;
@@ -293,15 +295,19 @@ int DecoderBase::DecodeOnePacket() {
 
             //一个 packet 包含多少 frame?
             int frameCount = 0;
+            // 从解码器中接收一帧数据
+
             while (avcodec_receive_frame(m_AVCodecContext, m_Frame) == 0) {
+                LOGCATD("DecoderBase::DecodeOnePacket 从解码器中接收一帧数据");
                 //更新时间戳
                 UpdateTimeStamp();
                 //同步
                 AVSync();
                 //渲染
-                LOGCATE("DecoderBase::DecodeOnePacket 000 m_MediaType=%d", m_MediaType);
+                LOGCATD("DecoderBase::DecodeOnePacket 000 m_MediaType=%d", m_MediaType);
+                // 向外界传递一帧数据
                 OnFrameAvailable(m_Frame);
-                LOGCATE("DecoderBase::DecodeOnePacket 0001 m_MediaType=%d", m_MediaType);
+                LOGCATD("DecoderBase::DecodeOnePacket 0001 m_MediaType=%d", m_MediaType);
                 frameCount ++;
             }
             LOGCATE("BaseDecoder::DecodeOneFrame frameCount=%d", frameCount);

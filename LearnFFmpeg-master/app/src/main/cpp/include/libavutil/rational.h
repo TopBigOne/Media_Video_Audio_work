@@ -54,10 +54,11 @@
 
 /**
  * Rational number (pair of numerator and denominator).
+ * 有理数
  */
 typedef struct AVRational{
-    int num; ///< Numerator
-    int den; ///< Denominator
+    int num; ///< Numerator   ：分母
+    int den; ///< Denominator ：分母
 } AVRational;
 
 /**

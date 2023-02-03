@@ -57,6 +57,10 @@ public:
 private:
     virtual void OnDecoderReady();
     virtual void OnDecoderDone();
+    /**
+     * audio frame
+     * @param frame
+     */
     virtual void OnFrameAvailable(AVFrame *frame);
     virtual void ClearCache();
 

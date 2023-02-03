@@ -78,8 +78,7 @@ MediaRecorderContext *MediaRecorderContext::GetContext(JNIEnv *env, jobject inst
 		return NULL;
 	}
 
-	MediaRecorderContext *pContext = reinterpret_cast<MediaRecorderContext *>(env->GetLongField(
-			instance, s_ContextHandle));
+	MediaRecorderContext *pContext = reinterpret_cast<MediaRecorderContext *>(env->GetLongField(instance, s_ContextHandle));
 	return pContext;
 }
 

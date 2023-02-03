@@ -124,6 +124,7 @@ void GLCameraRender::Init(int videoWidth, int videoHeight, int *dstSize) {
 }
 
 void GLCameraRender::RenderVideoFrame(NativeImage *pImage) {
+    LOGCATD("底层绘制视频");
     LOGCATE("GLCameraRender::RenderVideoFrame pImage=%p", pImage);
     if(pImage == nullptr || pImage->ppPlane[0] == nullptr)
         return;

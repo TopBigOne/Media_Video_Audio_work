@@ -1,1 +1,0 @@
-1: 在clion 上搭建ffmpeg 环境；
