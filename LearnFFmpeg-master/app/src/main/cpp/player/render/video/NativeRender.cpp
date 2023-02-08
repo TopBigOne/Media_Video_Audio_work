@@ -66,6 +66,7 @@ void NativeRender::RenderVideoFrame(NativeImage *pImage)
     int dstLineSize = m_NativeWindowBuffer.stride * 4;
 
     for (int i = 0; i < m_DstHeight; ++i) {
+        // 一行一行地拷贝图像数据
         memcpy(dstBuffer + i * dstLineSize, pImage->ppPlane[0] + i * srcLineSize, srcLineSize);
     }
 
