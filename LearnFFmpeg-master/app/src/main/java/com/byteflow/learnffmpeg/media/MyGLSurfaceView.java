@@ -85,18 +85,19 @@ public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetect
             {
                 float y = e.getY();
                 float x = e.getX();
-                switch (e.getAction()) {
-                    case MotionEvent.ACTION_MOVE:
-                        float dy = y - mPreviousY;
-                        float dx = x - mPreviousX;
-                        mYAngle += dx * TOUCH_SCALE_FACTOR;
-                        mXAngle += dy * TOUCH_SCALE_FACTOR;
+                if (e.getAction() == MotionEvent.ACTION_MOVE) {
+                    float dy = y - mPreviousY;
+                    float dx = x - mPreviousX;
+                    mYAngle += dx * TOUCH_SCALE_FACTOR;
+                    mXAngle += dy * TOUCH_SCALE_FACTOR;
                 }
+
                 mPreviousY = y;
                 mPreviousX = x;
 
-                if(mOnGestureCallback !=null)
+                if(mOnGestureCallback !=null) {
                     mOnGestureCallback.onGesture(mXAngle, mYAngle, mCurScale);
+                }
             }
 
         } else {
@@ -106,6 +107,11 @@ public class MyGLSurfaceView extends GLSurfaceView implements ScaleGestureDetect
         return true;
     }
 
+    /**
+     * 设置屏幕宽高比
+     * @param width
+     * @param height
+     */
     public void setAspectRatio(int width, int height) {
         Log.d(TAG, "setAspectRatio() called with: width = [" + width + "], height = [" + height + "]");
         if (width < 0 || height < 0) {

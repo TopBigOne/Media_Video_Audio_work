@@ -26,8 +26,20 @@ public:
     virtual void UnInit();
 
 private:
+    /**
+     * 创建并初始化引擎对象
+     * @return
+     */
     int CreateEngine();
+    /**
+     * 创建并初始化混音器
+     * @return
+     */
     int CreateOutputMixer();
+    /**
+     * 创建并初始化播放器
+     * @return
+     */
     int CreateAudioPlayer();
     int GetAudioFrameQueueSize();
     void StartRender();

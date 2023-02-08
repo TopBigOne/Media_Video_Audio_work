@@ -79,15 +79,18 @@ public class VideoRecorderActivity extends AppCompatActivity implements Camera2F
     };
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 1;
     private RelativeLayout mSurfaceViewRoot;
+    // 利用FFmpeg 做视频拍摄
     protected FFMediaRecorder mMediaRecorder;
     private Camera2Wrapper mCamera2Wrapper;
     private ImageButton mSwitchCamBtn, mSwitchRatioBtn;
+    // 预览画面
     protected GLSurfaceView mGLSurfaceView;
     protected Size mRootViewSize, mScreenSize;
     private CaptureLayout mRecordedButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate:  视频录制 activity");
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -105,6 +108,7 @@ public class VideoRecorderActivity extends AppCompatActivity implements Camera2F
 //                }
 //            }
 //        });
+        // 直接new了一个
         mGLSurfaceView = new GLSurfaceView(this);
         mMediaRecorder = new FFMediaRecorder();
 
@@ -190,7 +194,9 @@ public class VideoRecorderActivity extends AppCompatActivity implements Camera2F
     @Override
     public void onPreviewFrame(byte[] data, int width, int height) {
         Log.d(TAG, "onPreviewFrame() called with: data = [" + data + "], width = [" + width + "], height = [" + height + "]");
+       // native 层，保存视频数据
         mMediaRecorder.onPreviewFrame(IMAGE_FORMAT_I420, data, width, height);
+       // java 层： 绘制视频画面
         mMediaRecorder.requestRender();
     }
 
@@ -212,7 +218,9 @@ public class VideoRecorderActivity extends AppCompatActivity implements Camera2F
         mSurfaceViewRoot = (RelativeLayout) findViewById(R.id.surface_root);
         RelativeLayout.LayoutParams p = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
+        // 添加 SurfaceView
         mSurfaceViewRoot.addView(mGLSurfaceView, p);
+
         mMediaRecorder.init(mGLSurfaceView);
 
         mCamera2Wrapper = new Camera2Wrapper(this);

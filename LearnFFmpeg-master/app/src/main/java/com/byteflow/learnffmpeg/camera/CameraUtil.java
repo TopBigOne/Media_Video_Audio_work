@@ -42,9 +42,10 @@ public class CameraUtil {
         final int imageWidth = image.getWidth();
         final int imageHeight = image.getHeight();
         final Image.Plane[] planes = image.getPlanes();
-        byte[] data = new byte[imageWidth * imageHeight *
-                ImageFormat.getBitsPerPixel(ImageFormat.YUV_420_888) / 8];
-        int offset = 0;
+
+        int byteSize = imageWidth * imageHeight * ImageFormat.getBitsPerPixel(ImageFormat.YUV_420_888) / 8;
+        byte[] data   = new byte[byteSize];
+        int    offset = 0;
 
         for (int plane = 0; plane < planes.length; ++plane) {
             final ByteBuffer buffer = planes[plane].getBuffer();

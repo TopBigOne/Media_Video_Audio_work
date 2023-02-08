@@ -1,16 +1,40 @@
 package com.byteflow.learnffmpeg.media;
 
+import android.util.Log;
+
+import androidx.annotation.LongDef;
+
 public abstract class MediaRecorderContext {
+    private static final String TAG = "MediaRecorderContext : ";
+
     public static final int IMAGE_FORMAT_RGBA = 0x01;
     public static final int IMAGE_FORMAT_NV21 = 0x02;
     public static final int IMAGE_FORMAT_NV12 = 0x03;
+    /**
+     * 4个Y 分量，共用一个uv 分量；
+     */
     public static final int IMAGE_FORMAT_I420 = 0x04;
 
-    public static final int RECORDER_TYPE_SINGLE_VIDEO   = 0; //仅录制视频
-    public static final int RECORDER_TYPE_SINGLE_AUDIO   = 1; //仅录制音频
-    public static final int RECORDER_TYPE_AV             = 2; //同时录制音频和视频,打包成 MP4 文件
 
-    private long mNativeContextHandle;
+    /**
+     * 仅录制视频
+     */
+    public static final int RECORDER_TYPE_SINGLE_AUDIO = 1;
+    /**
+     * 仅录制音频
+     */
+    public static final int RECORDER_TYPE_AV           = 2;
+    /**
+     * 同时录制音频和视频,打包成 MP4 文件
+     */
+    public static final int RECORDER_TYPE_SINGLE_VIDEO = 0;
+
+    // native 层 指针
+    private long mNativeContextHandle = -1;
+
+    protected void testNativeContextHandle() {
+        Log.d(TAG, "testNativeContextHandle: mNativeContextHandle : " + mNativeContextHandle);
+    }
 
     protected native void native_CreateContext();
 

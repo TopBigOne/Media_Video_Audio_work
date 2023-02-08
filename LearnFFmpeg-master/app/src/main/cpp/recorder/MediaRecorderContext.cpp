@@ -13,189 +13,198 @@
 jfieldID MediaRecorderContext::s_ContextHandle = 0L;
 
 MediaRecorderContext::MediaRecorderContext() {
-	GLCameraRender::GetInstance();
+    GLCameraRender::GetInstance();
 }
 
-MediaRecorderContext::~MediaRecorderContext()
-{
-	GLCameraRender::ReleaseInstance();
+MediaRecorderContext::~MediaRecorderContext() {
+    GLCameraRender::ReleaseInstance();
 }
 
-void MediaRecorderContext::CreateContext(JNIEnv *env, jobject instance)
-{
-	LOGCATE("MediaRecorderContext::CreateContext");
-	MediaRecorderContext *pContext = new MediaRecorderContext();
-	StoreContext(env, instance, pContext);
+void MediaRecorderContext::CreateContext(JNIEnv *env, jobject instance) {
+    LOGCATE("MediaRecorderContext::CreateContext");
+    MediaRecorderContext *pContext = new MediaRecorderContext();
+    StoreContext(env, instance, pContext);
 }
 
-void MediaRecorderContext::StoreContext(JNIEnv *env, jobject instance, MediaRecorderContext *pContext)
-{
-	LOGCATE("MediaRecorderContext::StoreContext");
-	jclass cls = env->GetObjectClass(instance);
-	if (cls == NULL)
-	{
-		LOGCATE("MediaRecorderContext::StoreContext cls == NULL");
-		return;
-	}
+void
+MediaRecorderContext::StoreContext(JNIEnv *env, jobject instance, MediaRecorderContext *pContext) {
+    LOGCATE("MediaRecorderContext::StoreContext");
+    jclass cls = env->GetObjectClass(instance);
+    if (cls == NULL) {
+        LOGCATE("MediaRecorderContext::StoreContext cls == NULL");
+        return;
+    }
 
-	s_ContextHandle = env->GetFieldID(cls, "mNativeContextHandle", "J");
-	if (s_ContextHandle == NULL)
-	{
-		LOGCATE("MediaRecorderContext::StoreContext s_ContextHandle == NULL");
-		return;
-	}
+    // 上下文 句柄
+    s_ContextHandle = env->GetFieldID(cls, "mNativeContextHandle", "J");
+    if (s_ContextHandle == NULL) {
+        LOGCATE("MediaRecorderContext::StoreContext s_ContextHandle == NULL");
+        return;
+    }
 
-	env->SetLongField(instance, s_ContextHandle, reinterpret_cast<jlong>(pContext));
+    // 这行代码运行了以后，java层的 mNativeContextHandle 就有值了；
+//	env->SetLongField(instance, s_ContextHandle, 1314520);
+    auto mNativeContextHandle = reinterpret_cast<jlong>(pContext);
+    LOGCATD("testNativeContextHandle in C++ :  %ld \n", mNativeContextHandle);
+    env->SetLongField(instance, s_ContextHandle, mNativeContextHandle);
 
 }
 
 
-void MediaRecorderContext::DeleteContext(JNIEnv *env, jobject instance)
-{
-	LOGCATE("MediaRecorderContext::DeleteContext");
-	if (s_ContextHandle == NULL)
-	{
-		LOGCATE("MediaRecorderContext::DeleteContext Could not find render context.");
-		return;
-	}
+void MediaRecorderContext::DeleteContext(JNIEnv *env, jobject instance) {
+    LOGCATE("MediaRecorderContext::DeleteContext");
+    if (s_ContextHandle == NULL) {
+        LOGCATE("MediaRecorderContext::DeleteContext Could not find render context.");
+        return;
+    }
 
-	MediaRecorderContext *pContext = reinterpret_cast<MediaRecorderContext *>(env->GetLongField(
-			instance, s_ContextHandle));
-	if (pContext)
-	{
-		delete pContext;
-	}
-	env->SetLongField(instance, s_ContextHandle, 0L);
+    MediaRecorderContext *pContext = reinterpret_cast<MediaRecorderContext *>(env->GetLongField(
+            instance, s_ContextHandle));
+    if (pContext) {
+        delete pContext;
+    }
+    env->SetLongField(instance, s_ContextHandle, 0L);
 }
 
-MediaRecorderContext *MediaRecorderContext::GetContext(JNIEnv *env, jobject instance)
-{
-	LOGCATE("MediaRecorderContext::GetContext");
+MediaRecorderContext *MediaRecorderContext::GetContext(JNIEnv *env, jobject instance) {
+    LOGCATE("MediaRecorderContext::GetContext");
 
-	if (s_ContextHandle == NULL)
-	{
-		LOGCATE("MediaRecorderContext::GetContext Could not find render context.");
-		return NULL;
-	}
+    if (s_ContextHandle == NULL) {
+        LOGCATE("MediaRecorderContext::GetContext Could not find render context.");
+        return NULL;
+    }
 
-	MediaRecorderContext *pContext = reinterpret_cast<MediaRecorderContext *>(env->GetLongField(instance, s_ContextHandle));
-	return pContext;
+    MediaRecorderContext *pContext = reinterpret_cast<MediaRecorderContext *>(env->GetLongField(
+            instance, s_ContextHandle));
+    return pContext;
 }
 
-int MediaRecorderContext::Init()
-{
-	GLCameraRender::GetInstance()->Init(0, 0, nullptr);
-	GLCameraRender::GetInstance()->SetRenderCallback(this, OnGLRenderFrame);
-	return 0;
+int MediaRecorderContext::Init() {
+    GLCameraRender::GetInstance()->Init(0, 0, nullptr);
+    GLCameraRender::GetInstance()->SetRenderCallback(this, OnGLRenderFrame);
+    return 0;
 }
 
-int MediaRecorderContext::UnInit()
-{
-	GLCameraRender::GetInstance()->UnInit();
+int MediaRecorderContext::UnInit() {
+    GLCameraRender::GetInstance()->UnInit();
 
-	return 0;
+    return 0;
 }
 
 int
-MediaRecorderContext::StartRecord(int recorderType, const char *outUrl, int frameWidth, int frameHeight, long videoBitRate,
+MediaRecorderContext::StartRecord(int recorderType, const char *outUrl, int frameWidth,
+                                  int frameHeight, long videoBitRate,
                                   int fps) {
-	LOGCATE("MediaRecorderContext::StartRecord recorderType=%d, outUrl=%s, [w,h]=[%d,%d], videoBitRate=%ld, fps=%d", recorderType, outUrl, frameWidth, frameHeight, videoBitRate, fps);
-	std::unique_lock<std::mutex> lock(m_mutex);
-	switch (recorderType) {
-		case RECORDER_TYPE_SINGLE_VIDEO:
-			if(m_pVideoRecorder == nullptr) {
-				m_pVideoRecorder = new SingleVideoRecorder(outUrl, frameHeight, frameWidth, videoBitRate, fps);
-				m_pVideoRecorder->StartRecord();
-			}
-			break;
-		case RECORDER_TYPE_SINGLE_AUDIO:
-			if(m_pAudioRecorder == nullptr) {
-				m_pAudioRecorder = new SingleAudioRecorder(outUrl, DEFAULT_SAMPLE_RATE, AV_CH_LAYOUT_STEREO, AV_SAMPLE_FMT_S16);
-				m_pAudioRecorder->StartRecord();
-			}
-			break;
-		case RECORDER_TYPE_AV:
-			if(m_pAVRecorder == nullptr) {
-				RecorderParam param = {0};
-				param.frameWidth      = frameHeight;
-				param.frameHeight     = frameWidth;
-				param.videoBitRate    = videoBitRate;
-				param.fps             = fps;
-				param.audioSampleRate = DEFAULT_SAMPLE_RATE;
-				param.channelLayout   = AV_CH_LAYOUT_STEREO;
-				param.sampleFormat    = AV_SAMPLE_FMT_S16;
-				m_pAVRecorder = new MediaRecorder(outUrl, &param);
-				m_pAVRecorder->StartRecord();
-			}
-			break;
-		default:
-			break;
-	}
+    LOGCATE("MediaRecorderContext::StartRecord recorderType=%d, outUrl=%s, [w,h]=[%d,%d], videoBitRate=%ld, fps=%d",
+            recorderType, outUrl, frameWidth, frameHeight, videoBitRate, fps);
+    std::unique_lock<std::mutex> lock(m_mutex);
+    // 根据录制类型，创建不同的Recorder;
+    switch (recorderType) {
+        // case 1: only video
+        case RECORDER_TYPE_SINGLE_VIDEO:
+            if (m_pVideoRecorder == nullptr) {
+                m_pVideoRecorder = new SingleVideoRecorder(outUrl, frameWidth, frameHeight,
+                                                           videoBitRate, fps);
+                m_pVideoRecorder->StartRecord();
+            }
+            break;
+            // case 2: only audio
+        case RECORDER_TYPE_SINGLE_AUDIO:
+            if (m_pAudioRecorder == nullptr) {
+                m_pAudioRecorder = new SingleAudioRecorder(outUrl, DEFAULT_SAMPLE_RATE,
+                                                           AV_CH_LAYOUT_STEREO, AV_SAMPLE_FMT_S16);
+                m_pAudioRecorder->StartRecord();
+            }
+            break;
+            // case 3:  audio |  video
+        case RECORDER_TYPE_AV:
+            if (m_pAVRecorder == nullptr) {
+                RecorderParam param = {0};
+                param.frameWidth = frameHeight;
+                param.frameHeight = frameWidth;
+                param.videoBitRate = videoBitRate;
+                param.fps = fps;
+
+                param.audioSampleRate = DEFAULT_SAMPLE_RATE;
+                param.channelLayout = AV_CH_LAYOUT_STEREO;
+                param.sampleFormat = AV_SAMPLE_FMT_S16;
+                m_pAVRecorder = new MediaRecorder(outUrl, &param);
+                m_pAVRecorder->StartRecord();
+            }
+            break;
+        default:
+            break;
+    }
 
 
     return 0;
 }
 
 int MediaRecorderContext::StopRecord() {
-	std::unique_lock<std::mutex> lock(m_mutex);
-	if(m_pVideoRecorder != nullptr) {
+    std::unique_lock<std::mutex> lock(m_mutex);
+    if (m_pVideoRecorder != nullptr) {
         m_pVideoRecorder->StopRecord();
         delete m_pVideoRecorder;
         m_pVideoRecorder = nullptr;
     }
 
-	if(m_pAudioRecorder != nullptr) {
-		m_pAudioRecorder->StopRecord();
-		delete m_pAudioRecorder;
-		m_pAudioRecorder = nullptr;
-	}
+    if (m_pAudioRecorder != nullptr) {
+        m_pAudioRecorder->StopRecord();
+        delete m_pAudioRecorder;
+        m_pAudioRecorder = nullptr;
+    }
 
-	if(m_pAVRecorder != nullptr) {
-		m_pAVRecorder->StopRecord();
-		delete m_pAVRecorder;
-		m_pAVRecorder = nullptr;
-	}
+    if (m_pAVRecorder != nullptr) {
+        m_pAVRecorder->StopRecord();
+        delete m_pAVRecorder;
+        m_pAVRecorder = nullptr;
+    }
     return 0;
 }
 
 void MediaRecorderContext::OnAudioData(uint8_t *pData, int size) {
     LOGCATE("MediaRecorderContext::OnAudioData pData=%p, dataSize=%d", pData, size);
     AudioFrame audioFrame(pData, size, false);
-    if(m_pAudioRecorder != nullptr)
-		m_pAudioRecorder->OnFrame2Encode(&audioFrame);
+    if (m_pAudioRecorder != nullptr)
+        m_pAudioRecorder->OnFrame2Encode(&audioFrame);
 
-    if(m_pAVRecorder != nullptr)
-    	m_pAVRecorder->OnFrame2Encode(&audioFrame);
+    if (m_pAVRecorder != nullptr)
+        m_pAVRecorder->OnFrame2Encode(&audioFrame);
 }
 
-void MediaRecorderContext::OnPreviewFrame(int format, uint8_t *pBuffer, int width, int height)
-{
-	LOGCATE("MediaRecorderContext::UpdateFrame format=%d, width=%d, height=%d, pData=%p",
-			format, width, height, pBuffer);
-	NativeImage nativeImage;
-	nativeImage.format = format;
-	nativeImage.width = width;
-	nativeImage.height = height;
-	nativeImage.ppPlane[0] = pBuffer;
+/**
+ * core : 绘制视频帧
+ * @param format
+ * @param pBuffer
+ * @param width
+ * @param height
+ */
+void MediaRecorderContext::OnPreviewFrame(int format, uint8_t *pBuffer, int width, int height) {
+    LOGCATI("MediaRecorderContext::OnPreviewFrame format=%d, width=%d, height=%d, pData=%p",
+            format, width, height, pBuffer);
+    NativeImage nativeImage;
+    nativeImage.format = format;
+    nativeImage.width = width;
+    nativeImage.height = height;
+    nativeImage.ppPlane[0] = pBuffer;
 
-    switch (format)
-	{
-		case IMAGE_FORMAT_NV12:
-		case IMAGE_FORMAT_NV21:
-			nativeImage.ppPlane[1] = nativeImage.ppPlane[0] + width * height;
-			nativeImage.pLineSize[0] = width;
+    switch (format) {
+        case IMAGE_FORMAT_NV12:
+        case IMAGE_FORMAT_NV21:
+            nativeImage.ppPlane[1] = nativeImage.ppPlane[0] + width * height;
+            nativeImage.pLineSize[0] = width;
             nativeImage.pLineSize[1] = width;
-			break;
-		case IMAGE_FORMAT_I420:
-			nativeImage.ppPlane[1] = nativeImage.ppPlane[0] + width * height;
-			nativeImage.ppPlane[2] = nativeImage.ppPlane[1] + width * height / 4;
+            break;
+        case IMAGE_FORMAT_I420:
+            nativeImage.ppPlane[1] = nativeImage.ppPlane[0] + width * height;
+            nativeImage.ppPlane[2] = nativeImage.ppPlane[1] + width * height / 4;
             nativeImage.pLineSize[0] = width;
             nativeImage.pLineSize[1] = width / 2;
             nativeImage.pLineSize[2] = width / 2;
-			break;
-		default:
-			break;
-	}
+            break;
+        default:
+            break;
+    }
 
 //	std::unique_lock<std::mutex> lock(m_mutex);
 //	if(m_pVideoRecorder!= nullptr) {
@@ -204,62 +213,60 @@ void MediaRecorderContext::OnPreviewFrame(int format, uint8_t *pBuffer, int widt
 //	lock.unlock();
 
     //NativeImageUtil::DumpNativeImage(&nativeImage, "/sdcard", "camera");
+    // core : 绘制视频帧
     GLCameraRender::GetInstance()->RenderVideoFrame(&nativeImage);
 }
 
-void MediaRecorderContext::SetTransformMatrix(float translateX, float translateY, float scaleX, float scaleY, int degree, int mirror)
-{
-	m_transformMatrix.translateX = translateX;
-	m_transformMatrix.translateY = translateY;
-	m_transformMatrix.scaleX = scaleX;
-	m_transformMatrix.scaleY = scaleY;
-	m_transformMatrix.degree = degree;
-	m_transformMatrix.mirror = mirror;
-	GLCameraRender::GetInstance()->UpdateMVPMatrix(&m_transformMatrix);
+void MediaRecorderContext::SetTransformMatrix(float translateX, float translateY, float scaleX,
+                                              float scaleY, int degree, int mirror) {
+    m_transformMatrix.translateX = translateX;
+    m_transformMatrix.translateY = translateY;
+    m_transformMatrix.scaleX = scaleX;
+    m_transformMatrix.scaleY = scaleY;
+    m_transformMatrix.degree = degree;
+    m_transformMatrix.mirror = mirror;
+    GLCameraRender::GetInstance()->UpdateMVPMatrix(&m_transformMatrix);
 }
 
-void MediaRecorderContext::OnSurfaceCreated()
-{
-	GLCameraRender::GetInstance()->OnSurfaceCreated();
+void MediaRecorderContext::OnSurfaceCreated() {
+    GLCameraRender::GetInstance()->OnSurfaceCreated();
 }
 
-void MediaRecorderContext::OnSurfaceChanged(int width, int height)
-{
-	GLCameraRender::GetInstance()->OnSurfaceChanged(width, height);
+void MediaRecorderContext::OnSurfaceChanged(int width, int height) {
+    GLCameraRender::GetInstance()->OnSurfaceChanged(width, height);
 }
 
-void MediaRecorderContext::OnDrawFrame()
-{
-	GLCameraRender::GetInstance()->OnDrawFrame();
+void MediaRecorderContext::OnDrawFrame() {
+    GLCameraRender::GetInstance()->OnDrawFrame();
 }
 
 void MediaRecorderContext::OnGLRenderFrame(void *ctx, NativeImage *pImage) {
-	LOGCATE("MediaRecorderContext::OnGLRenderFrame ctx=%p, pImage=%p", ctx, pImage);
-	MediaRecorderContext *context = static_cast<MediaRecorderContext *>(ctx);
-	std::unique_lock<std::mutex> lock(context->m_mutex);
-	if(context->m_pVideoRecorder != nullptr)
-		context->m_pVideoRecorder->OnFrame2Encode(pImage);
+    LOGCATE("MediaRecorderContext::OnGLRenderFrame ctx=%p, pImage=%p", ctx, pImage);
+    MediaRecorderContext *context = static_cast<MediaRecorderContext *>(ctx);
+    std::unique_lock<std::mutex> lock(context->m_mutex);
+    if (context->m_pVideoRecorder != nullptr)
+        context->m_pVideoRecorder->OnFrame2Encode(pImage);
 
-	if(context->m_pAVRecorder != nullptr)
-		context->m_pAVRecorder->OnFrame2Encode(pImage);
+    if (context->m_pAVRecorder != nullptr)
+        context->m_pAVRecorder->OnFrame2Encode(pImage);
 }
 
 void
 MediaRecorderContext::SetLUTImage(int index, int format, int width, int height, uint8_t *pData) {
-	LOGCATE("MediaRecorderContext::SetLUTImage index=%d, format=%d, width=%d, height=%d, pData=%p",
-			index, format, width, height, pData);
-	NativeImage nativeImage;
-	nativeImage.format = format;
-	nativeImage.width = width;
-	nativeImage.height = height;
-	nativeImage.ppPlane[0] = pData;
-	nativeImage.pLineSize[0] = width * 4; //RGBA
+    LOGCATE("MediaRecorderContext::SetLUTImage index=%d, format=%d, width=%d, height=%d, pData=%p",
+            index, format, width, height, pData);
+    NativeImage nativeImage;
+    nativeImage.format = format;
+    nativeImage.width = width;
+    nativeImage.height = height;
+    nativeImage.ppPlane[0] = pData;
+    nativeImage.pLineSize[0] = width * 4; //RGBA
 
-	GLCameraRender::GetInstance()->SetLUTImage(index, &nativeImage);
+    GLCameraRender::GetInstance()->SetLUTImage(index, &nativeImage);
 }
 
 void MediaRecorderContext::SetFragShader(int index, char *pShaderStr, int strSize) {
-	GLCameraRender::GetInstance()->SetFragShaderStr(index, pShaderStr, strSize);
+    GLCameraRender::GetInstance()->SetFragShaderStr(index, pShaderStr, strSize);
 }
 
 

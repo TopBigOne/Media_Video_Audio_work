@@ -56,8 +56,10 @@ private:
     GLuint m_VboIds[2];
     glm::mat4 m_MVPMatrix;
 
+    // Q: 这是干嘛用的？
     vec3 *m_pVerticesCoords = nullptr;
     vec2 *m_pTextureCoords = nullptr;
+
 
     int m_RenderDataSize;
 

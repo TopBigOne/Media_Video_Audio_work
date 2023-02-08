@@ -41,7 +41,7 @@ import static com.byteflow.learnffmpeg.view.RecordedButton.BUTTON_STATE_ONLY_REC
 
 
 public class AudioRecorderActivity extends AppCompatActivity implements AudioRecorder.AudioRecorderCallback {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "AudioRecorderActivity";
     private static final SimpleDateFormat DateTime_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
     private static final String RESULT_IMG_DIR = "byteflow/learnffmpeg";
     private static final String[] REQUEST_PERMISSIONS = {

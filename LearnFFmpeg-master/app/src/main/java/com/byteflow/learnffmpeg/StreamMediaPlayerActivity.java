@@ -38,7 +38,7 @@ import static com.byteflow.learnffmpeg.media.FFMediaPlayer.MSG_REQUEST_RENDER;
 import static com.byteflow.learnffmpeg.media.FFMediaPlayer.VIDEO_RENDER_ANWINDOW;
 
 public class StreamMediaPlayerActivity extends AppCompatActivity implements SurfaceHolder.Callback, FFMediaPlayer.EventCallback{
-    private static final String TAG = "MediaPlayerActivity";
+    private static final String TAG = "StreamActivity";
     private static final String[] REQUEST_PERMISSIONS = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
@@ -47,10 +47,14 @@ public class StreamMediaPlayerActivity extends AppCompatActivity implements Surf
     private FFMediaPlayer mMediaPlayer = null;
     private SeekBar mSeekBar = null;
     private boolean mIsTouch = false;
-    private final String mVideoPath = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+//    private final String mVideoPath = "http://9890.vod.myqcloud.com/9890_4e292f9a3dd011e6b4078980237cc3d3.f20.mp4";
+//    private final String mVideoPath = "https://media.w3.org/2010/05/sintel/trailer.mp4";
+    private final String mVideoPath = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: 播放链接视频；");
+
         setContentView(R.layout.activity_media_player);
         mSurfaceView = findViewById(R.id.surface_view);
         mSurfaceView.getHolder().addCallback(this);

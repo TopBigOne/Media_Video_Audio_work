@@ -112,9 +112,15 @@ public class FFMediaPlayer {
         native_SetMediaParams(mNativePlayerHandle, paramType, param);
     }
 
+    /**
+     * jni 层调用
+     * @param msgType
+     * @param msgValue
+     */
     private void playerEventCallback(int msgType, float msgValue) {
-        if(mEventCallback != null)
+        if(mEventCallback != null){
             mEventCallback.onPlayerEvent(msgType, msgValue);
+        }
 
     }
 

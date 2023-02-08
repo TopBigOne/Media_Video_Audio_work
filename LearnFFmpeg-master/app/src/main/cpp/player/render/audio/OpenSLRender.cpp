@@ -179,6 +179,7 @@ int OpenSLRender::CreateOutputMixer() {
 }
 
 int OpenSLRender::CreateAudioPlayer() {
+    LOGCATE("OpenSLRender::CreateAudioPlayer CreateAudioPlayer 创建音频播放器");
     SLDataLocator_AndroidSimpleBufferQueue android_queue = {SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, 2};
     SLDataFormat_PCM pcm = {
             SL_DATAFORMAT_PCM,//format type
@@ -191,6 +192,7 @@ int OpenSLRender::CreateAudioPlayer() {
     };
     SLDataSource slDataSource = {&android_queue, &pcm};
 
+    // 针对数据接收器的输出混合定位器(混音器)
     SLDataLocator_OutputMix outputMix = {SL_DATALOCATOR_OUTPUTMIX, m_OutputMixObj};
     SLDataSink slDataSink = {&outputMix, nullptr};
 

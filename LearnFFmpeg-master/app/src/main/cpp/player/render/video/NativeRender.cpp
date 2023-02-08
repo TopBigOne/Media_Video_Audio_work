@@ -52,6 +52,10 @@ void NativeRender::Init(int videoWidth, int videoHeight, int *dstSize)
     dstSize[1] = m_DstHeight;
 }
 
+/**
+ * 绘制视频帧
+ * @param pImage
+ */
 void NativeRender::RenderVideoFrame(NativeImage *pImage)
 {
     if(m_NativeWindow == nullptr || pImage == nullptr) return;

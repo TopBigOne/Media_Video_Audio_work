@@ -31,7 +31,7 @@ public class CaptureLayout extends FrameLayout {
         this.captureLisenter = captureLisenter;
     }
 
-    public void setReturnLisenter(ReturnListener returnListener) {
+    public void setReturnListener(ReturnListener returnListener) {
         this.returnListener = returnListener;
     }
 

@@ -1,10 +1,8 @@
 /**
- *
  * Created by 公众号：字节流动 on 2021/3/16.
  * https://github.com/githubhaohao/LearnFFmpeg
  * 最新文章首发于公众号：字节流动，有疑问或者技术交流可以添加微信 Byte-Flow ,领取视频教程, 拉你进技术交流群
- *
- * */
+ */
 
 package com.byteflow.learnffmpeg.camera;
 
@@ -38,36 +36,39 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 摄像头封装
+ */
 public class Camera2Wrapper {
-    private static final String TAG = "Camera2Wrapper";
-    private static final int DEFAULT_CAMERA_ID = 0;
-    private final float THRESHOLD = 0.001f;
+    private static final String TAG               = "Camera2Wrapper";
+    private static final int    DEFAULT_CAMERA_ID = 0;
+    private static final float  THRESHOLD         = 0.001f;
 
-    private Camera2FrameCallback mCamera2FrameCallback;
-    private Context mContext;
-    private CameraManager mCameraManager;
+    private final Camera2FrameCallback mCamera2FrameCallback;
+    private final Context              mContext;
+    private       CameraManager        mCameraManager;
 
     private CameraCaptureSession mCameraCaptureSession;
-    private CaptureRequest mPreviewRequest;
-    private CameraDevice mCameraDevice;
-    private String mCameraId;
-    private String[] mSupportCameraIds;
-    private ImageReader mPreviewImageReader, mCaptureImageReader;
+    private CaptureRequest       mPreviewRequest;
+    private CameraDevice         mCameraDevice;
+    private String               mCameraId;
+    private String[]             mSupportCameraIds;
+    private ImageReader          mPreviewImageReader, mCaptureImageReader;
     private Integer mSensorOrientation;
 
-    private Semaphore mCameraLock = new Semaphore(1);
-    private Size mDefaultPreviewSize = new Size(1280, 720);
-    private Size mDefaultCaptureSize = new Size(1280, 720);
+    private Semaphore mCameraLock         = new Semaphore(1);
+    private Size      mDefaultPreviewSize = new Size(1280, 720);
+    private Size      mDefaultCaptureSize = new Size(1280, 720);
 
     private Surface mPreviewSurface;
 
     private Size mPreviewSize, mPictureSize;
     private List<Size> mSupportPreviewSize, mSupportPictureSize;
 
-    private Handler mBackgroundHandler;
+    private Handler       mBackgroundHandler;
     private HandlerThread mBackgroundThread;
 
-    private ImageReader.OnImageAvailableListener mOnPreviewImageAvailableListener = new ImageReader.OnImageAvailableListener() {
+    private final ImageReader.OnImageAvailableListener mOnPreviewImageAvailableListener = new ImageReader.OnImageAvailableListener() {
         @Override
         public void onImageAvailable(ImageReader reader) {
             Image image = reader.acquireLatestImage();
@@ -80,7 +81,7 @@ public class Camera2Wrapper {
         }
     };
 
-    private ImageReader.OnImageAvailableListener mOnCaptureImageAvailableListener = new ImageReader.OnImageAvailableListener() {
+    private final ImageReader.OnImageAvailableListener mOnCaptureImageAvailableListener = new ImageReader.OnImageAvailableListener() {
         @Override
         public void onImageAvailable(ImageReader reader) {
             Image image = reader.acquireLatestImage();
@@ -106,17 +107,20 @@ public class Camera2Wrapper {
     }
 
     private void initCamera2Wrapper() {
+        // step 1:
         mCameraManager = (CameraManager) mContext.getSystemService(Context.CAMERA_SERVICE);
         try {
             mSupportCameraIds = mCameraManager.getCameraIdList();
             if (checkCameraIdSupport(String.valueOf(DEFAULT_CAMERA_ID))) {
+                Log.d(TAG, "initCamera2Wrapper: the camera is supported.");
+
             } else {
                 throw new AndroidRuntimeException("Don't support the camera id: " + DEFAULT_CAMERA_ID);
             }
             mCameraId = String.valueOf(DEFAULT_CAMERA_ID);
             getCameraInfo(mCameraId);
 
-        } catch (CameraAccessException e) {
+        } catch (CameraAccessException e ) {
             e.printStackTrace();
         }
     }
@@ -134,8 +138,8 @@ public class Camera2Wrapper {
             mSupportPreviewSize = Arrays.asList(streamConfigs.getOutputSizes(SurfaceTexture.class));
 
             boolean supportDefaultSize = false;
-            Size sameRatioSize = null;
-            float defaultRatio = mDefaultPreviewSize.getWidth() * 1.0f / mDefaultPreviewSize.getHeight();
+            Size    sameRatioSize      = null;
+            float   defaultRatio       = mDefaultPreviewSize.getWidth() * 1.0f / mDefaultPreviewSize.getHeight();
             mPreviewSize = mSupportPreviewSize.get(mSupportPreviewSize.size() / 2);
             for (Size size : mSupportPreviewSize) {
                 Log.d(TAG, "initCamera2Wrapper() called mSupportPreviewSize " + size.getWidth() + "x" + size.getHeight());
@@ -154,7 +158,7 @@ public class Camera2Wrapper {
 
             if (supportDefaultSize) {
                 mPreviewSize = mDefaultPreviewSize;
-            } else if(sameRatioSize != null) {
+            } else if (sameRatioSize != null) {
                 mPreviewSize = sameRatioSize;
             }
             //Log.d(TAG, "initCamera2Wrapper() called mPreviewSize[w,h] = [" + mPreviewSize.getWidth() + "," + mPictureSize.getHeight() + "]");
@@ -178,7 +182,7 @@ public class Camera2Wrapper {
             }
             if (supportDefaultSize) {
                 mPictureSize = mDefaultCaptureSize;
-            }  else if(sameRatioSize != null) {
+            } else if (sameRatioSize != null) {
                 mPictureSize = sameRatioSize;
             }
         }
@@ -189,9 +193,10 @@ public class Camera2Wrapper {
 
     private boolean checkCameraIdSupport(String cameraId) {
         boolean isSupported = false;
-        for (String id: mSupportCameraIds) {
+        for (String id : mSupportCameraIds) {
             if (cameraId.equals(id)) {
                 isSupported = true;
+                break;
             }
         }
         return isSupported;
@@ -199,6 +204,7 @@ public class Camera2Wrapper {
 
     public void startCamera() {
         startBackgroundThread();
+
         if (mPreviewImageReader == null && mPreviewSize != null) {
             mPreviewImageReader = ImageReader.newInstance(mPreviewSize.getWidth(), mPreviewSize.getHeight(), ImageFormat.YUV_420_888, 2);
             mPreviewImageReader.setOnImageAvailableListener(mOnPreviewImageAvailableListener, mBackgroundHandler);
@@ -274,8 +280,7 @@ public class Camera2Wrapper {
 
     private void openCamera() {
         Log.d(TAG, "openCamera() called");
-        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 
@@ -321,10 +326,15 @@ public class Camera2Wrapper {
 
     }
 
+
+    /**
+     * 相机状态
+     */
     private final CameraDevice.StateCallback mStateCallback = new CameraDevice.StateCallback() {
 
         @Override
         public void onOpened(@NonNull CameraDevice cameraDevice) {
+            Log.d(TAG, "CameraDevice.StateCallback onOpened: 。。。。。");
             // This method is called when the camera is opened.  We start camera preview here.
             mCameraLock.release();
             mCameraDevice = cameraDevice;
@@ -333,6 +343,7 @@ public class Camera2Wrapper {
 
         @Override
         public void onDisconnected(@NonNull CameraDevice cameraDevice) {
+            Log.d(TAG, "CameraDevice.StateCallback onDisconnected: 。。。。。");
             mCameraLock.release();
             cameraDevice.close();
             mCameraDevice = null;
@@ -340,6 +351,7 @@ public class Camera2Wrapper {
 
         @Override
         public void onError(@NonNull CameraDevice cameraDevice, int error) {
+            Log.d(TAG, "CameraDevice.StateCallback onError: 。。。。。");
             mCameraLock.release();
             cameraDevice.close();
             mCameraDevice = null;
@@ -348,16 +360,17 @@ public class Camera2Wrapper {
 
     private void createCaptureSession() {
         try {
-            if (null == mCameraDevice || null == mPreviewSurface || null == mCaptureImageReader) return;
-            mCameraDevice.createCaptureSession(Arrays.asList(mPreviewSurface, mCaptureImageReader.getSurface()),
-                    mSessionStateCallback, mBackgroundHandler);
+            if (null == mCameraDevice || null == mPreviewSurface || null == mCaptureImageReader) {
+                return;
+            }
+            mCameraDevice.createCaptureSession(Arrays.asList(mPreviewSurface, mCaptureImageReader.getSurface()), mSessionStateCallback, mBackgroundHandler);
 
         } catch (CameraAccessException e) {
             Log.e(TAG, "createCaptureSession " + e.toString());
         }
     }
 
-    private CameraCaptureSession.StateCallback mSessionStateCallback = new CameraCaptureSession.StateCallback() {
+    private final CameraCaptureSession.StateCallback mSessionStateCallback = new CameraCaptureSession.StateCallback() {
         @Override
         public void onConfigured(@NonNull CameraCaptureSession session) {
             mCameraCaptureSession = session;
@@ -379,21 +392,32 @@ public class Camera2Wrapper {
         }
     };
 
+    /**
+     * 预览请求：
+     *
+     * @return
+     */
     private CaptureRequest createPreviewRequest() {
-        if (null == mCameraDevice || mPreviewSurface == null) return null;
+        if (null == mCameraDevice || mPreviewSurface == null) {
+            return null;
+        }
+
         try {
             CaptureRequest.Builder builder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             builder.addTarget(mPreviewSurface);
             return builder.build();
         } catch (CameraAccessException e) {
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, e.getMessage() + "");
+
             return null;
         }
     }
 
     private void startBackgroundThread() {
+        // thread
         mBackgroundThread = new HandlerThread("Camera2Background");
         mBackgroundThread.start();
+        // handle.
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
     }
 
@@ -411,24 +435,22 @@ public class Camera2Wrapper {
     }
 
     public void capture() {
-        if (mCameraDevice == null) return;
+        if (mCameraDevice == null) {
+            return;
+        }
         final CaptureRequest.Builder captureBuilder;
         try {
             captureBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
             captureBuilder.addTarget(mCaptureImageReader.getSurface());
 
             // Use the same AE and AF modes as the preview.
-            captureBuilder.set(CaptureRequest.CONTROL_AF_MODE,
-                    CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+            captureBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
 
             // Orientation
-            CameraCaptureSession.CaptureCallback CaptureCallback
-                    = new CameraCaptureSession.CaptureCallback() {
+            CameraCaptureSession.CaptureCallback CaptureCallback = new CameraCaptureSession.CaptureCallback() {
 
                 @Override
-                public void onCaptureCompleted(@NonNull CameraCaptureSession session,
-                                               @NonNull CaptureRequest request,
-                                               @NonNull TotalCaptureResult result) {
+                public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {
                     if (mPreviewRequest != null && mCameraCaptureSession != null) {
                         try {
                             mCameraCaptureSession.setRepeatingRequest(mPreviewRequest, null, mBackgroundHandler);

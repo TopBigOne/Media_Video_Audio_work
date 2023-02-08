@@ -124,10 +124,11 @@ void GLCameraRender::Init(int videoWidth, int videoHeight, int *dstSize) {
 }
 
 void GLCameraRender::RenderVideoFrame(NativeImage *pImage) {
-    LOGCATD("底层绘制视频");
-    LOGCATE("GLCameraRender::RenderVideoFrame pImage=%p", pImage);
-    if(pImage == nullptr || pImage->ppPlane[0] == nullptr)
+    LOGCATI("RenderVideoFrame： 底层绘制视频");
+    LOGCATI("GLCameraRender::RenderVideoFrame pImage=%p", pImage);
+    if(pImage == nullptr || pImage->ppPlane[0] == nullptr){
         return;
+    }
     std::unique_lock<std::mutex> lock(m_Mutex);
     if (pImage->width != m_RenderImage.width || pImage->height != m_RenderImage.height) {
         if (m_RenderImage.ppPlane[0] != nullptr) {
@@ -308,6 +309,7 @@ void GLCameraRender::OnSurfaceChanged(int w, int h) {
 }
 
 void GLCameraRender::OnDrawFrame() {
+    LOGCATI("GLCameraRender::OnDrawFrame .");
     if(m_IsShaderChanged) {
         unique_lock<mutex> lock(m_ShaderMutex);
         GLUtils::DeleteProgram(m_FboProgramObj);
@@ -581,7 +583,7 @@ bool GLCameraRender::CreateFrameBufferObj() {
 }
 
 void GLCameraRender::GetRenderFrameFromFBO() {
-    LOGCATE("GLCameraRender::GetRenderFrameFromFBO m_RenderFrameCallback=%p", m_RenderFrameCallback);
+    LOGCATD("GLCameraRender::GetRenderFrameFromFBO m_RenderFrameCallback: %p", m_RenderFrameCallback);
     if(m_RenderFrameCallback != nullptr) {
         uint8_t *pBuffer = new uint8_t[m_RenderImage.width * m_RenderImage.height * 4];
         NativeImage nativeImage = m_RenderImage;
@@ -627,7 +629,7 @@ void GLCameraRender::SetLUTImage(int index, NativeImage *pLUTImg) {
 }
 
 void GLCameraRender::UpdateExtTexture() {
-    LOGCATE("GLCameraRender::UpdateExtTexture");
+    LOGCATI("GLCameraRender::Update Ext Texture");
     if(m_ExtImageChanged && m_ExtImage.ppPlane[0] != nullptr) {
         if(m_ExtTextureId != GL_NONE) {
             glDeleteTextures(1, &m_ExtTextureId);

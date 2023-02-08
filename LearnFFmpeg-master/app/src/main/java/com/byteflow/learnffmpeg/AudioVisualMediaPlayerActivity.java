@@ -41,7 +41,7 @@ import static com.byteflow.learnffmpeg.media.FFMediaPlayer.VIDEO_GL_RENDER;
 import static com.byteflow.learnffmpeg.media.FFMediaPlayer.VIDEO_RENDER_OPENGL;
 
 public class AudioVisualMediaPlayerActivity extends AppCompatActivity implements GLSurfaceView.Renderer, FFMediaPlayer.EventCallback{
-    private static final String TAG = "MediaPlayerActivity";
+    private static final String TAG = "AudioVisualActivity";
     private static final String[] REQUEST_PERMISSIONS = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
     };
@@ -167,6 +167,7 @@ public class AudioVisualMediaPlayerActivity extends AppCompatActivity implements
 
     @Override
     public void onDrawFrame(GL10 gl10) {
+        // 绘制 视频画面
         FFMediaPlayer.native_OnDrawFrame(VIDEO_GL_RENDER);
     }
 

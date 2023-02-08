@@ -30,11 +30,13 @@
         android:background="@android:color/transparent"
         android:src="@drawable/ic_aspect_ratio_btn" />
 
+<!-- 这里在java 代码中会添加surfaceView ,做预览画面-->
     <RelativeLayout
         android:id="@+id/surface_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </RelativeLayout>
+
     <RelativeLayout
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="30dp"

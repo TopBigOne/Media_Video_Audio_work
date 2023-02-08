@@ -14,30 +14,48 @@ import java.nio.ByteBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+/**
+ * 视频拍摄
+ */
 public class FFMediaRecorder extends MediaRecorderContext implements GLSurfaceView.Renderer {
-    private static final String TAG = "CameraRender";
-    private GLSurfaceView mGLSurfaceView;
+    private static final String        TAG = "FFMediaRecorder";
+
+    private              GLSurfaceView mGLSurfaceView;
 
     public FFMediaRecorder() {
     }
 
-    public void init(GLSurfaceView surfaceView) { //for Video
+    /**
+     * for Video
+     */
+    public void init(GLSurfaceView surfaceView) { //
+        Log.d(TAG, "init: for Video.");
         mGLSurfaceView = surfaceView;
         mGLSurfaceView.setEGLContextClientVersion(2);
         mGLSurfaceView.setRenderer(this);
         mGLSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
+        testNativeContextHandle();
         native_CreateContext();
         native_Init();
+        testNativeContextHandle();
     }
 
-    public void init() { //for audio
+    /**
+     * for audio
+     */
+    public void init() {
+        Log.d(TAG, "init: for audio.");
+        testNativeContextHandle();
         native_CreateContext();
         native_Init();
+        testNativeContextHandle();
     }
+
 
     public void requestRender() {
         if (mGLSurfaceView != null) {
+            // mGLThread
             mGLSurfaceView.requestRender();
         }
     }
@@ -70,8 +88,8 @@ public class FFMediaRecorder extends MediaRecorderContext implements GLSurfaceVi
     public void loadShaderFromAssetsFile(int shaderIndex, Resources r) {
         String result = null;
         try {
-            InputStream in = r.getAssets().open("shaders/fshader_" + shaderIndex + ".glsl");
-            int ch = 0;
+            InputStream           in   = r.getAssets().open("shaders/fshader_" + shaderIndex + ".glsl");
+            int                   ch   = 0;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             while ((ch = in.read()) != -1) {
                 baos.write(ch);

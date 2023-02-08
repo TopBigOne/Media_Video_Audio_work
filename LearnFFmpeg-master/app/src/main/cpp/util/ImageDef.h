@@ -13,6 +13,7 @@
 #include "stdint.h"
 #include "LogUtil.h"
 
+// https://blog.csdn.net/byhook/article/details/84037338
 #define IMAGE_FORMAT_RGBA           0x01
 #define IMAGE_FORMAT_NV21           0x02
 #define IMAGE_FORMAT_NV12           0x03
@@ -21,7 +22,7 @@
 #define IMAGE_FORMAT_RGBA_EXT       "RGB32"
 #define IMAGE_FORMAT_NV21_EXT       "NV21"
 #define IMAGE_FORMAT_NV12_EXT       "NV12"
-#define IMAGE_FORMAT_I420_EXT       "I420"
+#define IMAGE_FORMAT_I420_EXT       "I420" // YU12
 
 typedef struct _tag_NativeRectF {
     float left;
@@ -118,7 +119,9 @@ public:
                 pSrcImg->pLineSize[0], pSrcImg->pLineSize[1], pSrcImg->pLineSize[2],
                 pDstImg->pLineSize[0], pDstImg->pLineSize[1], pDstImg->pLineSize[2]);
 
-        if (pSrcImg == nullptr || pSrcImg->ppPlane[0] == nullptr) return;
+        if (pSrcImg == nullptr || pSrcImg->ppPlane[0] == nullptr){
+            return;
+        }
 
         if (pSrcImg->format != pDstImg->format ||
             pSrcImg->width != pDstImg->width ||
@@ -203,8 +206,7 @@ public:
             }
                 break;
             default: {
-                LOGCATE("NativeImageUtil::CopyNativeImage do not support the format. Format = %d",
-                        pSrcImg->format);
+                LOGCATE("NativeImageUtil::CopyNativeImage do not support the format. Format = %d",pSrcImg->format);
             }
                 break;
         }
