@@ -15,9 +15,6 @@ void AudioDecoder::OnDecoderReady() {
     if(m_AudioRender) {
         AVCodecContext *codeCtx = GetCodecContext();
 
-        // https://blog.csdn.net/Explorer_day/article/details/76332556
-        // 1. 生成 resample 上下文，设置输入和输出的通道数、采样率以及采样格式，初始化上下文
-        // 防止 空指针
         m_SwrContext = swr_alloc();
 
         av_opt_set_int(m_SwrContext, "in_channel_layout", codeCtx->channel_layout, 0);
@@ -35,7 +32,6 @@ void AudioDecoder::OnDecoderReady() {
              codeCtx->sample_rate, codeCtx->channels, codeCtx->sample_fmt, codeCtx->frame_size,codeCtx->channel_layout);
 
         // resample params
-        // 2. 申请输出 Buffer
         m_nbSamples = (int)av_rescale_rnd(ACC_NB_SAMPLES, AUDIO_DST_SAMPLE_RATE, codeCtx->sample_rate, AV_ROUND_UP);
         m_DstFrameDataSze = av_samples_get_buffer_size(NULL, AUDIO_DST_CHANNEL_COUNTS,m_nbSamples, DST_SAMPLT_FORMAT, 1);
 

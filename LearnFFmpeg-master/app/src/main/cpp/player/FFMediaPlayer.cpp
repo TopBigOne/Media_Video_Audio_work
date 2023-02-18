@@ -13,14 +13,6 @@
 #include <render/video/VRGLRender.h>
 #include "FFMediaPlayer.h"
 
-/**
- *
- * @param jniEnv
- * @param obj  java层的 FFMediaPlayer
- * @param url
- * @param videoRenderType
- * @param surface
- */
 void FFMediaPlayer::Init(JNIEnv *jniEnv, jobject obj, char *url, int videoRenderType, jobject surface) {
     jniEnv->GetJavaVM(&m_JavaVM);
     m_JavaObj = jniEnv->NewGlobalRef(obj);

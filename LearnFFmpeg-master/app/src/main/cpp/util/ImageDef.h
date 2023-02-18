@@ -96,7 +96,7 @@ public:
             }
                 break;
             default:
-                LOGCATE("NativeImageUtil::AllocNativeImage do not support the format. Format = %d",
+                LOGCATI(" NativeImageUtil::AllocNativeImage do not support the format. Format = %d",
                         pImage->format);
                 break;
         }
@@ -112,10 +112,10 @@ public:
     }
 
     static void CopyNativeImage(NativeImage *pSrcImg, NativeImage *pDstImg) {
-        LOGCATE("NativeImageUtil::CopyNativeImage src[w,h,format]=[%d, %d, %d], dst[w,h,format]=[%d, %d, %d]",
+        LOGCATI(" NativeImageUtil::CopyNativeImage src[w,h,format]=[%d, %d, %d], dst[w,h,format]=[%d, %d, %d]",
                 pSrcImg->width, pSrcImg->height, pSrcImg->format, pDstImg->width, pDstImg->height,
                 pDstImg->format);
-        LOGCATE("NativeImageUtil::CopyNativeImage src[line0,line1,line2]=[%d, %d, %d], dst[line0,line1,line2]=[%d, %d, %d]",
+        LOGCATI(" NativeImageUtil::CopyNativeImage src[line0,line1,line2]=[%d, %d, %d], dst[line0,line1,line2]=[%d, %d, %d]",
                 pSrcImg->pLineSize[0], pSrcImg->pLineSize[1], pSrcImg->pLineSize[2],
                 pDstImg->pLineSize[0], pDstImg->pLineSize[1], pDstImg->pLineSize[2]);
 
@@ -206,7 +206,7 @@ public:
             }
                 break;
             default: {
-                LOGCATE("NativeImageUtil::CopyNativeImage do not support the format. Format = %d",pSrcImg->format);
+                LOGCATI(" NativeImageUtil::CopyNativeImage do not support the format. Format = %d",pSrcImg->format);
             }
                 break;
         }
@@ -246,7 +246,7 @@ public:
 
         FILE *fp = fopen(imgPath, "wb");
 
-        LOGCATE("DumpNativeImage fp=%p, file=%s", fp, imgPath);
+        LOGCATI(" DumpNativeImage fp=%p, file=%s", fp, imgPath);
 
         if (fp) {
             switch (pSrcImg->format) {
@@ -275,7 +275,7 @@ public:
                     break;
                 }
                 default: {
-                    LOGCATE("DumpNativeImage default");
+                    LOGCATI(" DumpNativeImage default");
                     break;
                 }
             }

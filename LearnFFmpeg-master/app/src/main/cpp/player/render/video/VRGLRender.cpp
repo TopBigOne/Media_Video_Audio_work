@@ -234,7 +234,6 @@ void VRGLRender::OnSurfaceCreated() {
 
     glGenTextures(TEXTURE_NUM, m_TextureIds);
     for (int i = 0; i < TEXTURE_NUM ; ++i) {
-        // 绑定纹理
         glActiveTexture(GL_TEXTURE0 + i);
         glBindTexture(GL_TEXTURE_2D, m_TextureIds[i]);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -401,7 +400,7 @@ void VRGLRender::ReleaseInstance() {
 }
 
 void VRGLRender::GenerateMesh() {
-    // 构建顶点坐标
+    //构建顶点坐标
     for (float vAngle = 90; vAngle > -90; vAngle = vAngle - ANGLE_SPAN) {//垂直方向ANGLE_SPAN度一份
         for (float hAngle = 360; hAngle > 0; hAngle = hAngle - ANGLE_SPAN) {//水平方向ANGLE_SPAN度一份
             //纵向横向各到一个角度后计算对应的此点在球面上的坐标

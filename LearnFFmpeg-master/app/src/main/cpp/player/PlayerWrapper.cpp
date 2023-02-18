@@ -21,12 +21,12 @@ void PlayerWrapper::Init(JNIEnv *jniEnv, jobject obj, char *url, int playerType,
             break;
     }
 
-    if (m_MediaPlayer)
+    if(m_MediaPlayer)
         m_MediaPlayer->Init(jniEnv, obj, url, renderType, surface);
 }
 
 void PlayerWrapper::UnInit() {
-    if (m_MediaPlayer) {
+    if(m_MediaPlayer) {
         m_MediaPlayer->UnInit();
         delete m_MediaPlayer;
         m_MediaPlayer = nullptr;
@@ -34,33 +34,32 @@ void PlayerWrapper::UnInit() {
 }
 
 void PlayerWrapper::Play() {
-    if (m_MediaPlayer) {
+    if(m_MediaPlayer) {
         m_MediaPlayer->Play();
     }
 }
 
 void PlayerWrapper::Pause() {
-    if (m_MediaPlayer) {
+    if(m_MediaPlayer) {
         m_MediaPlayer->Pause();
     }
 }
 
 void PlayerWrapper::Stop() {
-    if (m_MediaPlayer) {
+    if(m_MediaPlayer) {
         m_MediaPlayer->Stop();
     }
 }
 
 void PlayerWrapper::SeekToPosition(float position) {
-    // m_MediaPlayer maybe is null;
-    if (m_MediaPlayer) {
+    if(m_MediaPlayer) {
         m_MediaPlayer->SeekToPosition(position);
     }
 
 }
 
 long PlayerWrapper::GetMediaParams(int paramType) {
-    if (m_MediaPlayer) {
+    if(m_MediaPlayer) {
         return m_MediaPlayer->GetMediaParams(paramType);
     }
 
@@ -68,7 +67,7 @@ long PlayerWrapper::GetMediaParams(int paramType) {
 }
 
 void PlayerWrapper::SetMediaParams(int paramType, jobject obj) {
-    if (m_MediaPlayer) {
+    if(m_MediaPlayer) {
         m_MediaPlayer->SetMediaParams(paramType, obj);
     }
 

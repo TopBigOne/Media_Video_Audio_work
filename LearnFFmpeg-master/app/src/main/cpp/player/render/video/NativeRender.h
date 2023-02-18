@@ -26,7 +26,6 @@ public:
 
 private:
     ANativeWindow_Buffer m_NativeWindowBuffer;
-    // Q :  ANativeWindow 是怎么初始化的？
     ANativeWindow *m_NativeWindow = nullptr;
     int m_DstWidth;
     int m_DstHeight;

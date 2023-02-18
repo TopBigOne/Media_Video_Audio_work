@@ -16,27 +16,24 @@ void OpenSLRender::Init() {
 
     int result = -1;
     do {
-        // 创建并初始化引擎对象
         result = CreateEngine();
         if(result != SL_RESULT_SUCCESS)
         {
-            LOGCATE("OpenSLRender::Init Create Engine fail. result=%d", result);
+            LOGCATE("OpenSLRender::Init CreateEngine fail. result=%d", result);
             break;
         }
 
-        // 创建并初始化混音器
         result = CreateOutputMixer();
         if(result != SL_RESULT_SUCCESS)
         {
-            LOGCATE("OpenSLRender::Init Create Output Mixer fail. result=%d", result);
+            LOGCATE("OpenSLRender::Init CreateOutputMixer fail. result=%d", result);
             break;
         }
 
-        // 创建并初始化播放器
         result = CreateAudioPlayer();
         if(result != SL_RESULT_SUCCESS)
         {
-            LOGCATE("OpenSLRender::Init Create Audio Player fail. result=%d", result);
+            LOGCATE("OpenSLRender::Init CreateAudioPlayer fail. result=%d", result);
             break;
         }
 
@@ -124,7 +121,6 @@ void OpenSLRender::UnInit() {
 int OpenSLRender::CreateEngine() {
     SLresult result = SL_RESULT_SUCCESS;
     do {
-        // // 创建引擎对象
         result = slCreateEngine(&m_EngineObj, 0, nullptr, 0, nullptr, nullptr);
         if(result != SL_RESULT_SUCCESS)
         {
@@ -132,7 +128,6 @@ int OpenSLRender::CreateEngine() {
             break;
         }
 
-        // 实例化
         result = (*m_EngineObj)->Realize(m_EngineObj, SL_BOOLEAN_FALSE);
         if(result != SL_RESULT_SUCCESS)
         {
@@ -140,8 +135,6 @@ int OpenSLRender::CreateEngine() {
             break;
         }
 
-
-        // 获取引擎对象接口
         result = (*m_EngineObj)->GetInterface(m_EngineObj, SL_IID_ENGINE, &m_EngineEngine);
         if(result != SL_RESULT_SUCCESS)
         {
@@ -179,7 +172,6 @@ int OpenSLRender::CreateOutputMixer() {
 }
 
 int OpenSLRender::CreateAudioPlayer() {
-    LOGCATE("OpenSLRender::CreateAudioPlayer CreateAudioPlayer 创建音频播放器");
     SLDataLocator_AndroidSimpleBufferQueue android_queue = {SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE, 2};
     SLDataFormat_PCM pcm = {
             SL_DATAFORMAT_PCM,//format type
@@ -192,7 +184,6 @@ int OpenSLRender::CreateAudioPlayer() {
     };
     SLDataSource slDataSource = {&android_queue, &pcm};
 
-    // 针对数据接收器的输出混合定位器(混音器)
     SLDataLocator_OutputMix outputMix = {SL_DATALOCATOR_OUTPUTMIX, m_OutputMixObj};
     SLDataSink slDataSink = {&outputMix, nullptr};
 
@@ -259,9 +250,7 @@ void OpenSLRender::StartRender() {
         lock.unlock();
     }
 
-    // 设置播放状态
     (*m_AudioPlayerPlay)->SetPlayState(m_AudioPlayerPlay, SL_PLAYSTATE_PLAYING);
-    // 激活回调接口
     AudioPlayerCallback(m_BufferQueue, this);
 }
 
@@ -275,7 +264,6 @@ void OpenSLRender::HandleAudioFrameQueue() {
     }
 
     std::unique_lock<std::mutex> lock(m_Mutex);
-    // 播放存放在音频帧队列中的数据
     AudioFrame *audioFrame = m_AudioFrameQueue.front();
     if (nullptr != audioFrame && m_AudioPlayerPlay) {
         SLresult result = (*m_BufferQueue)->Enqueue(m_BufferQueue, audioFrame->data, (SLuint32) audioFrame->dataSize);

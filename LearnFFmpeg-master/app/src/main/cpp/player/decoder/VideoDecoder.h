@@ -53,10 +53,6 @@ public:
 private:
     virtual void OnDecoderReady();
     virtual void OnDecoderDone();
-    /**
-    * video frame
-    * @param frame
-    */
     virtual void OnFrameAvailable(AVFrame *frame);
 
     const AVPixelFormat DST_PIXEL_FORMAT = AV_PIX_FMT_RGBA;

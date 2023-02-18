@@ -144,7 +144,7 @@ JNIEXPORT void JNICALL Java_com_byteflow_learnffmpeg_media_FFMediaPlayer_native_
 JNIEXPORT void JNICALL Java_com_byteflow_learnffmpeg_media_FFMediaPlayer_native_1Stop
         (JNIEnv *env, jobject obj, jlong player_handle) {
     if (player_handle != 0) {
-        PlayerWrapper *ffMediaPlayer = reinterpret_cast<PlayerWrapper *>(player_handle);
+        auto *ffMediaPlayer = reinterpret_cast<PlayerWrapper *>(player_handle);
         ffMediaPlayer->Stop();
     }
 }
@@ -157,7 +157,7 @@ JNIEXPORT void JNICALL Java_com_byteflow_learnffmpeg_media_FFMediaPlayer_native_
 JNIEXPORT void JNICALL Java_com_byteflow_learnffmpeg_media_FFMediaPlayer_native_1UnInit
         (JNIEnv *env, jobject obj, jlong player_handle) {
     if (player_handle != 0) {
-        PlayerWrapper *ffMediaPlayer = reinterpret_cast<PlayerWrapper *>(player_handle);
+        auto *ffMediaPlayer = reinterpret_cast<PlayerWrapper *>(player_handle);
         ffMediaPlayer->UnInit();
         delete ffMediaPlayer;
     }

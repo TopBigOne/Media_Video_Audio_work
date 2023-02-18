@@ -9,14 +9,8 @@
 
 #include "NativeRender.h"
 
-/**
- *
- * @param env
- * @param surface  java层的 surface；
- */
 NativeRender::NativeRender(JNIEnv *env, jobject surface): VideoRender(VIDEO_RENDER_ANWINDOW)
 {
-    // 1. 利用 Java 层 SurfaceView 传下来的 Surface 对象，获取 ANativeWindow
     m_NativeWindow = ANativeWindow_fromSurface(env, surface);
 }
 
@@ -44,7 +38,6 @@ void NativeRender::Init(int videoWidth, int videoHeight, int *dstSize)
     }
     LOGCATE("NativeRender::Init window[w,h]=[%d, %d],DstSize[w, h]=[%d, %d]", windowWidth, windowHeight, m_DstWidth, m_DstHeight);
 
-    // 2. 设置渲染区域和输入格式
     ANativeWindow_setBuffersGeometry(m_NativeWindow, m_DstWidth,
                                      m_DstHeight, WINDOW_FORMAT_RGBA_8888);
 
@@ -52,10 +45,6 @@ void NativeRender::Init(int videoWidth, int videoHeight, int *dstSize)
     dstSize[1] = m_DstHeight;
 }
 
-/**
- * 绘制视频帧
- * @param pImage
- */
 void NativeRender::RenderVideoFrame(NativeImage *pImage)
 {
     if(m_NativeWindow == nullptr || pImage == nullptr) return;
@@ -66,7 +55,6 @@ void NativeRender::RenderVideoFrame(NativeImage *pImage)
     int dstLineSize = m_NativeWindowBuffer.stride * 4;
 
     for (int i = 0; i < m_DstHeight; ++i) {
-        // 一行一行地拷贝图像数据
         memcpy(dstBuffer + i * dstLineSize, pImage->ppPlane[0] + i * srcLineSize, srcLineSize);
     }
 

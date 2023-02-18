@@ -34,12 +34,7 @@ public:
     virtual void Play() = 0;
     virtual void Pause() = 0;
     virtual void Stop() = 0;
-    /**
-     * seek 到某个时间点播放
-     * @param position
-     */
     virtual void SeekToPosition(float position) = 0;
-
     virtual long GetMediaParams(int paramType) = 0;
     virtual void SetMediaParams(int paramType, jobject obj){}
 

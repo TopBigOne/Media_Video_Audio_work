@@ -172,10 +172,6 @@ void AudioGLRender::OnDrawFrame() {
 
 }
 
-/**
- * 播放存放在音频帧
- * @param audioFrame
- */
 void AudioGLRender::UpdateAudioFrame(AudioFrame *audioFrame) {
     if(audioFrame != nullptr) {
         ByteFlowPrintD("AudioGLRender::UpdateAudioFrame audioFrame->dataSize=%d", audioFrame->dataSize);

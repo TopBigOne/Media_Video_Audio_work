@@ -137,7 +137,6 @@ void VideoDecoder::OnFrameAvailable(AVFrame *frame) {
             image.pLineSize[0] = image.width * 4;
         }
 
-        // 绘制画面
         m_VideoRender->RenderVideoFrame(&image);
 
         if(m_pVideoRecorder != nullptr) {

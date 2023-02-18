@@ -8,7 +8,6 @@
 
 #ifndef LEARNFFMPEG_MASTER_GLRENDER_H
 #define LEARNFFMPEG_MASTER_GLRENDER_H
-
 #include <thread>
 #include <ImageDef.h>
 #include "VideoRender.h"

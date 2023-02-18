@@ -12,7 +12,6 @@
 #include "ImageDef.h"
 
 class VideoRender {
-
 public:
     VideoRender(int type){
         m_RenderType = type;
@@ -27,7 +26,6 @@ public:
     }
 private:
     int m_RenderType = VIDEO_RENDER_ANWINDOW;
-
 };
 
 #endif //LEARNFFMPEG_VIDEORENDER_H
