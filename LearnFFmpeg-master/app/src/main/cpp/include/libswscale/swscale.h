@@ -189,6 +189,8 @@ struct SwsContext *sws_getContext(int srcW, int srcH, enum AVPixelFormat srcForm
                                   SwsFilter *dstFilter, const double *param);
 
 /**
+ * “像素格式和分辨率的转换”
+*
  * Scale the image slice in srcSlice and put the resulting scaled
  * slice in the image in dst. A slice is a sequence of consecutive
  * rows in an image.

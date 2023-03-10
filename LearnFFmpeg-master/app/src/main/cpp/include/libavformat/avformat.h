@@ -1458,7 +1458,7 @@ typedef struct AVFormatContext {
      */
     int64_t duration;
 
-    /**
+    /** 比特率
      * Total stream bitrate in bit/s, 0 if not
      * available. Never set it directly if the file_size and the
      * duration are known as FFmpeg can compute it automatically.

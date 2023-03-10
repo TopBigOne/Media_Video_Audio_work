@@ -1,15 +1,10 @@
-/**
- *
- * Created by 公众号：字节流动 on 2021/3/16.
- * https://github.com/githubhaohao/LearnFFmpeg
- * 最新文章首发于公众号：字节流动，有疑问或者技术交流可以添加微信 Byte-Flow ,领取视频教程, 拉你进技术交流群
- *
- * */
-
+//
+// Created by dev on 2023/3/7.
+//
 
 #include "DecoderBase.h"
 #include "LogUtil.h"
-#include "../../util/LogUtil.h"
+
 
 void DecoderBase::Start() {
     if(m_Thread == nullptr) {
@@ -308,7 +303,7 @@ int DecoderBase::DecodeOnePacket() {
         result = av_read_frame(m_AVFormatContext, m_Packet);
     }
 
-__EXIT:
+    __EXIT:
     av_packet_unref(m_Packet);
     return result;
 }

@@ -172,7 +172,7 @@ int av_image_fill_arrays(uint8_t *dst_data[4], int dst_linesize[4],
  * Return the size in bytes of the amount of data required to store an
  * image with the given parameters.
  *
- * @param pix_fmt  the pixel format of the image
+ * @param pix_fmt  the pixel format of the image 图片的像素格式
  * @param width    the width of the image in pixels
  * @param height   the height of the image in pixels
  * @param align    the assumed linesize alignment
