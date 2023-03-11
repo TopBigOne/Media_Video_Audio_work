@@ -295,6 +295,13 @@ typedef struct AVRegionOfInterest {
 typedef struct AVFrame {
 #define AV_NUM_DATA_POINTERS 8
     /**
+     * “它指向的就是 YUV 的数据，他是一个指针数组”
+     * data[0] Y数据
+     * data[1] U 数据
+     * data[2] V 数据
+     * ---
+     * 这些数组的大小是多少呢？
+     * 还有一个 linesize 数据来管理大小；
      * pointer to the picture/channel planes.
      * This might be different from the first allocated byte
      *
@@ -309,6 +316,7 @@ typedef struct AVFrame {
     uint8_t *data[AV_NUM_DATA_POINTERS];
 
     /**
+     * 是stride的值
      * For video, size in bytes of each picture line.
      * For audio, size in bytes of each plane.
      *
