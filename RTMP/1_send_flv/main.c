@@ -11,7 +11,11 @@ int main() {
 
 void test_rtmp() {
     puts("test rtmp.");
-    RTMP *rtmp = NULL;
+    RTMP *rtmp = RTMP_Alloc();
     RTMP_Init(rtmp);
+    if (rtmp == NULL) {
+        puts("rtmp 初始化失败.");
+        return;
+    }
 
 }
