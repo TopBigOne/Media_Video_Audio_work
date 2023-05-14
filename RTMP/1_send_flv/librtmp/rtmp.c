@@ -3357,7 +3357,7 @@ RTMP_SendPacket(RTMP *r, RTMPPacket *packet, int queue)
       AMF_DecodeString(ptr, &method);
       RTMP_Log(RTMP_LOGDEBUG, "Invoking %s", method.av_val);
       /* keep it in call queue till result arrives */
-      if (queue) {
+      if (queue) {// 将其保留在呼叫队列中，直到结果到达
         int txn;
         ptr += 3 + method.av_len;
         txn = (int)AMF_DecodeNumber(ptr);

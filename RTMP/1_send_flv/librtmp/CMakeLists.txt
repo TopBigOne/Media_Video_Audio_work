@@ -6,10 +6,13 @@ file(GLOB rtmp_source *.c)
 #编译静态库
 add_library(
         rtmp
+        STATIC
         ${rtmp_source})
 
-target_link_directories(
-        rtmp
-        PRIVATE ${PROJECT_SOURCE_DIR}
 
-)
+#
+#target_link_directories(
+#        rtmp
+#        PRIVATE ${PROJECT_SOURCE_DIR}
+#
+#)

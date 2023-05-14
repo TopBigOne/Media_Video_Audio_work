@@ -58,6 +58,7 @@ extern "C"
 #define RTMP_PROTOCOL_RTMPTS    (RTMP_FEATURE_HTTP|RTMP_FEATURE_SSL)
 #define RTMP_PROTOCOL_RTMFP     RTMP_FEATURE_MFP
 
+// 默认大小： 128 byte
 #define RTMP_DEFAULT_CHUNKSIZE	128
 
 /* needs to fit largest number of bytes recv() may return */
@@ -74,7 +75,10 @@ extern "C"
 #define RTMP_PACKET_TYPE_AUDIO 0x08
 #define RTMP_PACKET_TYPE_VIDEO 0x09
 #define RTMP_PACKET_TYPE_INFO  0x12
-
+// RTMP Chunk Header 的长度不是固定的，分为：12 字节、8 字节、4 字节、1 字节四种 ?
+// 一般情况下，msg stream id 是不会变的，
+// 所以针对视频或音频，除了第一个 Chunk 的 RTMP Chunk Header 是 12 字节的，
+// 后续的 Chunk 可省略这个 4 字节的字段，采用 8 字节的 RTMP Chunk Header
 #define RTMP_MAX_HEADER_SIZE 18
 
 #define RTMP_PACKET_SIZE_LARGE    0
